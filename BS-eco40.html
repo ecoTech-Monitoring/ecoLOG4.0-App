@@ -12298,7 +12298,15 @@ z-</textarea>
     function wireSimpleAndLanding() {
       // Landing main mode cards (Simple / Expert).
       document.querySelectorAll('#landing .land-mode').forEach(m => {
-        const go = () => chooseMode(m.getAttribute('data-mode'));
+        const go = () => {
+          let md = m.getAttribute('data-mode');
+          // BS-eco40: Auf Telefonen oeffnet die Expert-Kachel die Smartphone-Expert-
+          // Ansicht (mode-expert-mobile) — der fruehere Extra-Button dafuer wurde
+          // beim Aufraeumen der Startseite entfernt. Tablets/PCs (nicht als Telefon
+          // erkannt) bekommen weiterhin den vollen Expertenmodus.
+          if (md === 'expert' && typeof isPhoneDevice === 'function' && isPhoneDevice()) md = 'expertmobile';
+          chooseMode(md);
+        };
         m.onclick = go;
         m.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } };
       });

@@ -10640,6 +10640,7 @@ z-</textarea>
         'design.btn3d': '3D buttons', 'design.light': 'Light mode', 'design.done': 'Done',
         'auth.notConnected': 'Not connected', 'auth.authenticated': 'Authenticated', 'auth.pinRequired': 'PIN required', 'auth.openChecking': 'Open / checking',
         'land.tag': 'Web Bluetooth console for ecoTech data loggers & sensors',
+        'land.forPhoneExpert': 'opens the smartphone view',
         'land.simple': 'Simple Mode', 'land.simpleDesc': 'Essential functions',
         'land.expert': 'Expert Mode', 'land.expertDesc': 'All tools and parameters',
         'land.mobile': 'Mobile', 'land.mobileDesc': 'Optimised for smartphones / touch.',
@@ -10921,6 +10922,7 @@ z-</textarea>
         'design.btn3d': '3D-Tasten', 'design.light': 'Heller Modus', 'design.done': 'Fertig',
         'auth.notConnected': 'Nicht verbunden', 'auth.authenticated': 'Authentifiziert', 'auth.pinRequired': 'PIN erforderlich', 'auth.openChecking': 'Offen / prüfe',
         'land.tag': 'Web-Bluetooth-Konsole für ecoTech Datenlogger & Sensoren',
+        'land.forPhoneExpert': 'öffnet die Smartphone-Ansicht',
         'land.simple': 'Einfacher Modus', 'land.simpleDesc': 'Wesentliche Funktionen',
         'land.expert': 'Experten-Modus', 'land.expertDesc': 'Alle Werkzeuge und Parameter',
         'land.mobile': 'Mobil', 'land.mobileDesc': 'Optimiert für Smartphones / Touch.',
@@ -11175,6 +11177,7 @@ z-</textarea>
         'design.btn3d': 'Boutons 3D', 'design.light': 'Mode clair', 'design.done': 'Terminé',
         'auth.notConnected': 'Non connecté', 'auth.authenticated': 'Authentifié', 'auth.pinRequired': 'PIN requis', 'auth.openChecking': 'Ouvert / vérification',
         'land.tag': 'Console Web Bluetooth pour enregistreurs / capteurs ecoTech',
+        'land.forPhoneExpert': 'ouvre la vue smartphone',
         'land.simple': 'Mode simple', 'land.simpleDesc': 'Fonctions essentielles',
         'land.expert': 'Mode expert', 'land.expertDesc': 'Tous les outils et paramètres',
         'land.mobile': 'Mobile', 'land.mobileDesc': 'Optimisé pour smartphones / tactile.',
@@ -11690,6 +11693,7 @@ z-</textarea>
         'design.btn3d': 'Botones 3D', 'design.light': 'Modo claro', 'design.done': 'Listo',
         'auth.notConnected': 'No conectado', 'auth.authenticated': 'Autenticado', 'auth.pinRequired': 'PIN requerido', 'auth.openChecking': 'Abierto / comprobando',
         'land.tag': 'Consola Web Bluetooth para registradores / sensores ecoTech',
+        'land.forPhoneExpert': 'abre la vista de móvil',
         'land.simple': 'Modo simple', 'land.simpleDesc': 'Funciones esenciales',
         'land.expert': 'Modo experto', 'land.expertDesc': 'Todas las herramientas y parámetros',
         'land.mobile': 'Móvil', 'land.mobileDesc': 'Optimizado para smartphones / táctil.',
@@ -11840,6 +11844,7 @@ z-</textarea>
         'design.btn3d': 'Pulsanti 3D', 'design.light': 'Modalità chiara', 'design.done': 'Fatto',
         'auth.notConnected': 'Non connesso', 'auth.authenticated': 'Autenticato', 'auth.pinRequired': 'PIN richiesto', 'auth.openChecking': 'Aperto / verifica',
         'land.tag': 'Console Web Bluetooth per data logger / sensori ecoTech',
+        'land.forPhoneExpert': 'apre la vista smartphone',
         'land.simple': 'Modalità semplice', 'land.simpleDesc': 'Funzioni essenziali',
         'land.expert': 'Modalità esperto', 'land.expertDesc': 'Tutti gli strumenti e i parametri',
         'land.mobile': 'Mobile', 'land.mobileDesc': 'Ottimizzato per smartphone / touch.',
@@ -12689,6 +12694,14 @@ z-</textarea>
       applyMode(lsGet('bsh_mode', 'expert'));
       // On a phone, promote the Smartphone variants on the landing (CSS: body.is-phone) before it shows.
       document.body.classList.toggle('is-phone', isPhoneDevice());
+      // BS-eco40: Auf Telefonen oeffnet die Expert-Kachel die Smartphone-Expert-
+      // Ansicht — das Etikett muss das auch SAGEN (vorher stand dort irrefuehrend
+      // "For PC & tablet", weshalb Nutzer die Funktion fuer fehlend hielten).
+      if (document.body.classList.contains('is-phone')) {
+        const ef = document.querySelector('#landing .land-mode[data-mode="expert"] .lm-for');
+        if (ef) ef.innerHTML = '<i class="bi-phone"></i> <span data-i18n="land.forPhoneExpert">' +
+          escapeHtml(t('land.forPhoneExpert') || 'opens the smartphone view') + '</span>';
+      }
       openLanding();
 
       authBadge(); enableControls();

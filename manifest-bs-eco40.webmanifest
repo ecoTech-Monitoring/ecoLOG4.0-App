@@ -1,6 +1,6 @@
 {
-  "name": "ecoLOG 4.0 — ecoTech Datenlogger",
-  "short_name": "ecoLOG 4.0",
+  "name": "ecoLog 4.0 — ecoTech Datenlogger",
+  "short_name": "ecoLog 4.0",
   "description": "Web Bluetooth console for ecoTech data loggers and sensors. Based on BlueShell 27F (GEOprecision / LTX).",
   "lang": "en",
   "id": "./BS-eco40.html",

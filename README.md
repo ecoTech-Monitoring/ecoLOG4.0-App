@@ -1,4 +1,4 @@
-# ecoLOG 4.0 — App (Hosting)
+# ecoLog 4.0 — App (Hosting)
 
 Dies ist **nur die fertige, ausgelieferte App** (der Build). Der Quellcode,
 die Modularchitektur und die Historie liegen im getrennten Projekt-Repository
@@ -17,7 +17,7 @@ automatisch.
 
 ## Nutzung auf dem Smartphone
 
-- **Android:** in Chrome öffnen → Menü → „App installieren" → Launcher-Icon „ecoLOG 4.0".
+- **Android:** in Chrome öffnen → Menü → „App installieren" → Launcher-Icon „ecoLog 4.0".
 - **iPhone/iPad:** Web Bluetooth fehlt im System-Browser (Apple-Vorgabe).
   Die kostenlose App **Bluefy** (App Store) öffnen und die Adresse dort laden.
 - **Desktop:** Chrome, Edge oder Opera. Kein Firefox (kein Web Bluetooth).

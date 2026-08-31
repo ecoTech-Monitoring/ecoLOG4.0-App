@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
-  ecoLOG 4.0 (ecoTech Monitoring) — Web Bluetooth console for ecoTech / LTX data loggers & sensors
+  ecoLog 4.0 (ecoTech Monitoring) — Web Bluetooth console for ecoTech / LTX data loggers & sensors
   Basis: BlueShell 27F, Build 21.07.2026 (https://geo-precision.com/media/apps/BS27F/), gepflegt von ecoTech.
   Single-file build. Cross-browser + mobile (Android Chrome / iOS Bluefy) hardened build. Real Web Bluetooth (Chrome / Edge / Opera on Win/Android/Linux/macOS).
 
@@ -17,7 +17,7 @@
        Technologie Ueberwachung", "Load Data" -> "Datenbeladen"). -->
   <meta name="google" content="notranslate">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
-  <meta name="description" content="ecoLOG 4.0 — Web Bluetooth console for ecoTech data loggers and sensors (based on BlueShell 27F)">
+  <meta name="description" content="ecoLog 4.0 — Web Bluetooth console for ecoTech data loggers and sensors (based on BlueShell 27F)">
   <meta name="theme-color" content="#04122a">
   <!-- PWA: makes BlueShell installable as a standalone app (Chromium browsers). -->
   <link rel="manifest" href="manifest-bs-eco40.webmanifest">
@@ -25,7 +25,7 @@
   <link rel="apple-touch-icon" href="icon-192.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="ecoLOG 4.0">
+  <meta name="apple-mobile-web-app-title" content="ecoLog 4.0">
   <script>
     // --- PWA: install as a local app + offline shell (Chromium browsers) ---
     // A service worker cannot register on file://, so opening the file directly still works as a
@@ -210,7 +210,7 @@
     body[data-theme="dark"]  { --ecoInk: #e4e9f1; }
     body[data-theme="light"] { --ecoInk: #3e3d40; }
   </style>
-  <title>ecoLOG 4.0</title>
+  <title>ecoLog 4.0</title>
   <style id="bsThemeGlass">
     /* ============================================================
        "AQUA GLASS" — a deep-ocean glassmorphism theme.
@@ -343,7 +343,7 @@
     .ecoteal { color: #19aebe !important; -webkit-text-fill-color: #19aebe; }
     .ecoink { color: var(--muted); -webkit-text-fill-color: var(--muted); }
     /* BS-eco40: zweizeiliger Markenblock in Simple/Mobile — ecoTech Monitoring klein
-       oben, darunter der App-Name ecoLOG 4.0 mit Modus-Chip (wie im Expert-Kopf) */
+       oben, darunter der App-Name ecoLog 4.0 mit Modus-Chip (wie im Expert-Kopf) */
     .brandcol { display: flex; flex-direction: column; line-height: 1.2; gap: 1px; }
     .brandcol .gpword { font-size: 11px; }
     /* App-Name mit demselben Farbverlauf wie im Expert-Kopf (.bname) */
@@ -1219,7 +1219,7 @@
     .sm-bar .sm-brand i { color: var(--accent); }
     .sm-bar .sm-brand .tag { font-size: 11px; font-weight: 700; color: var(--muted); background: var(--panel);
       border: 1px solid var(--stroke); border-radius: 999px; padding: 2px 9px;
-      /* im Gradient-Text des .appname lesbar bleiben + mittig auf ecoLOG-4.0-Hoehe sitzen */
+      /* im Gradient-Text des .appname lesbar bleiben + mittig auf ecoLog-4.0-Hoehe sitzen */
       -webkit-text-fill-color: var(--muted); align-self: center; line-height: 1.4; }
     .sm-bar .spacer { flex: 1; }
     .sm-main { padding: clamp(18px, 3vw, 34px); max-width: 920px; margin: 0 auto; width: 100%; }
@@ -1291,7 +1291,10 @@
     body.mode-mobile { overflow: hidden; }
     /* Sticky top bar with safe-area inset */
     .mv-top {
-      position: sticky; top: 0; z-index: 30; display: flex; align-items: center; gap: 8px;
+      /* BS-eco40: flex-wrap statt nowrap — bei vergroesserter Schrift/Seitenzoom
+         (Chrome-Android-Bedienungshilfen) wurden Design- und Modus-Knopf sonst
+         rechts aus dem Viewport gedrueckt (Tester-Screenshot 27.08.). */
+      position: sticky; top: 0; z-index: 30; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px;
       padding: calc(env(safe-area-inset-top, 0px) + 10px) 12px 10px;
       padding-left: calc(env(safe-area-inset-left, 0px) + 12px);
       padding-right: calc(env(safe-area-inset-right, 0px) + 12px);
@@ -1476,6 +1479,23 @@
        blocks above; changes are additive and CSS-only). Every selector
        here already exists in the markup — nothing is renamed.
        ============================================================ */
+
+    /* BS-eco40: Zoom-/Grossschrift-Robustheit (Chrome-Android-Seitenzoom).
+       Statuskacheln fallen bei Enge automatisch auf eine Spalte zurueck,
+       statt die Labels am Kartenrand abzuschneiden. */
+    .mv-hero-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+    .mv-top .mv-brand { min-width: 0; }
+    /* Connect darf schrumpfen (Label mit Ellipse), statt rechts aus dem Bild zu ragen. */
+    .mv-top .connectbtn { flex: 1 1 auto; min-width: 0; max-width: max-content; overflow: hidden; }
+    .mv-top .connectbtn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    /* BS-eco40: Kanal-Tabelle auf Telefonen gut tippbar — >=16px Schrift
+       verhindert ausserdem den iOS-Fokus-Zoom (Bluefy). */
+    body.is-phone .chtbl input, body.is-phone .chtbl select { min-height: 38px; font-size: 16px; }
+    body.is-phone .chtbl td.acts button { min-width: 38px; min-height: 38px; }
+    /* Kompaktmodus der Kanal-Tabelle: schmalere Zahlenfelder, engere Aktionen. */
+    .chtbl.cmp input.tn { width: 66px; }
+    .chtbl.cmp td.acts { gap: 2px; }
+    .chtbl.cmp td.acts button { padding: 4px 6px; }
 
     /* --- 1. dvh fallbacks ---------------------------------------------
        The blocks above already use 100dvh for the drawer, #mobileView,
@@ -1930,7 +1950,7 @@
   </script>
 </head>
 
-<body data-theme="dark">
+<body data-theme="light">
 
   <!-- Bluetooth connect progress (fixed top bar + centered status) -->
   <div id="connProgress" aria-hidden="true">
@@ -1940,7 +1960,7 @@
 
   <!-- ============ LANDING / START PAGE ============ -->
   <div id="landing">
-    <div class="land-ver" id="landVer">ecoLOG 4.0 · Basis: BS27F Build 21.07.2026</div>
+    <div class="land-ver" id="landVer">ecoLog 4.0 · Basis: BS27F Build 21.07.2026</div>
     <div class="land-card">
       <div class="land-logo">
         <!-- ecoTech-Logo (Corporate Design: Petrol #19aebe, Dunkelgrau #3e3d40, Barlow;
@@ -1951,7 +1971,7 @@
           <image href="data:image/png;base64,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" x="368" y="2" width="144" height="146" preserveAspectRatio="xMidYMid meet"/>
         </svg>
       </div>
-      <div class="land-brand">ecoLOG 4.0</div>
+      <div class="land-brand">ecoLog 4.0</div>
       <p class="land-tag" data-i18n="land.tag">Web Bluetooth console for ecoTech data loggers &amp; sensors</p>
 
       <div class="land-langrow" id="landLangs"></div>
@@ -1981,7 +2001,7 @@
   <!-- ============ SIMPLE MODE VIEW ============ -->
   <div id="simpleView">
     <div class="sm-bar">
-      <span class="sm-brand"><i class="bi-bluetooth"></i><span class="brandcol"><span class="gpword"><b class="ecoteal">eco</b><b class="ecoink">Tech</b> Monitoring</span><span class="appname">ecoLOG 4.0 <span class="tag" data-i18n="land.simple">Simple Mode</span></span></span></span>
+      <span class="sm-brand"><i class="bi-bluetooth"></i><span class="brandcol"><span class="gpword"><b class="ecoteal">eco</b><b class="ecoink">Tech</b> Monitoring</span><span class="appname">ecoLog 4.0 <span class="tag" data-i18n="land.simple">Simple Mode</span></span></span></span>
       <div class="spacer"></div>
       <span class="badge" id="smAuthState" style="display:none"></span>
       <button class="connectbtn" id="smConnectBtn" type="button" style="width:auto; padding:10px 18px"><i class="bi-bluetooth"></i><span id="smConnectLbl" data-i18n="nav.connect">Connect</span></button>
@@ -2143,7 +2163,7 @@
   <div id="mobileView">
     <!-- Sticky top bar -->
     <div class="mv-top">
-      <span class="mv-brand"><i class="bi-bluetooth"></i><span class="brandcol"><span class="gpword"><b class="ecoteal">eco</b><b class="ecoink">Tech</b> Monitoring</span><span class="appname">ecoLOG 4.0 <span class="modetag" data-i18n="land.smartphone">Smartphone version</span></span></span></span>
+      <span class="mv-brand"><i class="bi-bluetooth"></i><span class="brandcol"><span class="gpword"><b class="ecoteal">eco</b><b class="ecoink">Tech</b> Monitoring</span><span class="appname">ecoLog 4.0 <span class="modetag" data-i18n="land.smartphone">Smartphone version</span></span></span></span>
       <div class="spacer"></div>
       <button class="connectbtn" id="mvConnectBtn" type="button"><i class="bi-bluetooth"></i><span id="mvConnectLbl" data-i18n="nav.connect">Connect</span></button>
       <button class="mv-icbtn" id="mvLangBtn" type="button" title="Language" aria-label="Language" aria-haspopup="true" aria-expanded="false"><i class="bi-translate"></i><span id="mvLangLbl">EN</span></button>
@@ -2183,6 +2203,9 @@
           <button class="mv-tile" data-mvgo="params"><i class="bi-sliders"></i><span data-i18n="sm.param">Parameter</span></button>
           <button class="mv-tile" data-mvgo="status"><i class="bi-clipboard-data"></i><span data-i18n="ls.title">Logger status</span></button>
           <button class="mv-tile danger" data-mvgo="clear"><i class="bi-trash"></i><span data-i18n="mem.clear">Clear memory</span></button>
+          <!-- BS-eco40: direkter Zugang zum vollen Funktionsumfang aus der Smartphone-
+               Ansicht heraus (oeffnet auf Telefonen die Smartphone-Expert-Ansicht). -->
+          <button class="mv-tile" id="mvExpertTile" type="button"><i class="bi-sliders2"></i><span data-i18n="mv.expert">Expert mode (all functions)</span></button>
         </div>
       </div>
 
@@ -2314,7 +2337,7 @@
       <button class="hmenu" id="hmenu" type="button" aria-label="Menu" title="Menu" aria-expanded="false" aria-controls="sidebar"><i class="bi-list"></i></button>
       <div class="brand">
         <span id="gpWord" class="gpword"><b class="ecoteal">eco</b><b class="ecoink">Tech</b> Monitoring</span>
-        <span class="bname"><i class="bi-bluetooth"></i>ecoLOG 4.0 <span class="modetag" data-i18n="land.expert">Expert Mode</span></span>
+        <span class="bname"><i class="bi-bluetooth"></i>ecoLog 4.0 <span class="modetag" data-i18n="land.expert">Expert Mode</span></span>
       </div>
       <div class="spacer"></div>
       <!-- Compact Connect button: visible only in Expert-smartphone mode so the user can
@@ -2368,7 +2391,10 @@
         <p class="sub" data-i18n="dash.sub">Connect to an LTX data logger or sensor and control it over Web Bluetooth.</p>
 
         <div class="grid cols-5" id="dHeadStats" style="margin-bottom:16px">
-          <div class="card stat"><span class="k" data-i18n="dash.device">Device</span><span class="v sm" id="dName">—</span></div>
+          <div class="card stat"><span class="k" data-i18n="dash.device">Device</span><span class="v sm" id="dName">—</span>
+            <!-- BS-eco40: 2. Zeile = vergebener Anzeigename (App-Alias oder iparam-Name);
+                 der BLE-Name darueber bleibt die Seriennummer/Kennung des Loggers. -->
+            <span class="v sm" id="dAlias" style="display:none; margin-top:2px; color:var(--accent)"></span></div>
           <div class="card stat"><span class="k">MAC</span><span class="v sm" id="dMac">—</span></div>
           <div class="card stat"><span class="k" data-i18n="dash.type">Type</span><span class="v" id="dType">—</span>
             <!-- Fallback when NO device type was auto-detected: refresh + manual pick. -->
@@ -2687,7 +2713,8 @@
             <button class="btn" id="tblRead" type="button" data-i18n-title="tip.cpRead"><i class="bi-download"></i><span data-i18n="chpar.read">Read</span></button>
             <button class="btn primary" id="tblWrite" type="button" data-i18n-title="tip.cpSave"><i class="bi-upload"></i><span data-i18n="tbl.write">Save &amp; apply (all channels)</span></button>
             <button class="btn" id="tblAddEnd" type="button"><i class="bi-plus-lg"></i><span data-i18n="chpar.add">Add channel</span></button>
-            <label class="ck" style="margin-left:auto"><input type="checkbox" id="tblTechCols"><span data-i18n="tbl.tech">Technical columns</span></label>
+            <label class="ck" style="margin-left:auto"><input type="checkbox" id="tblCompact"><span data-i18n="tbl.compact">Compact (phone)</span></label>
+            <label class="ck"><input type="checkbox" id="tblTechCols"><span data-i18n="tbl.tech">Technical columns</span></label>
           </div>
           <div class="chtbl-wrap"><table class="chtbl" id="chTbl"></table></div>
           <p class="muted small" style="margin:8px 0 0" data-i18n="tbl.hint">Tip: click a row number to open that channel in the single view below (coefficient helper, measurement test).</p>
@@ -3984,6 +4011,31 @@ z-</textarea>
       // shorter than 16 hex.)
       const m = String(S.mac || '').replace(/[^0-9a-fA-F]/g, '').toUpperCase();
       return (m.length >= 12 && m.length <= 16) ? m : null;
+    }
+    /* BS-eco40: frei waehlbarer Anzeigename je Geraet (nur im Browser gespeichert).
+       Der Bluetooth-Name der Firmware ist auf ~11 Zeichen ohne Leerzeichen begrenzt —
+       dieser App-Alias nicht. Schluessel bevorzugt die MAC (stabil auch nach einer
+       Umbenennung des BLE-Namens); solange die MAC noch nicht bekannt ist, dient
+       der BLE-Name als Rueckfall-Schluessel. */
+    function getDeviceAlias() {
+      const m = storeMac(), n = S.name || '';
+      return String((m && lsGet('bsh_alias_' + m, '')) || (n && lsGet('bsh_alias_' + n, '')) || '').trim();
+    }
+    function setDeviceAlias(v) {
+      const k = storeMac() || S.name; if (!k) return;
+      lsSet('bsh_alias_' + k, String(v == null ? '' : v).trim());
+    }
+    // Uebersicht: 2. Zeile der Geraete-Karte = Alias, sonst iparam-Name (falls er
+    // vom angezeigten BLE-Namen abweicht, z. B. weil BLE auf 11 Zeichen kuerzt).
+    function updateDeviceCard() {
+      const el = $('dAlias'); if (!el) return;
+      let a = '';
+      if (S.connected) {
+        a = getDeviceAlias();
+        if (!a && P.ip && P.ip.lines && P.ip.lines[5] && String(P.ip.lines[5]).trim() !== String(S.name || '').trim()) a = String(P.ip.lines[5]).trim();
+      }
+      el.textContent = a;
+      el.style.display = a ? '' : 'none';
     }
     async function saveDeviceFileToStore(deviceMac, filename, bytes, meta = {}) {
       try {
@@ -5563,7 +5615,11 @@ z-</textarea>
       let h = '';
       h += '<div class="pp-section"><i class="bi-tag"></i>' + t('logpar.secGeneral') + '</div>';
       h += '<div class="pp-grid">';
-      h += pf(t('logpar.devName'), txtIn('lp_name', L[5]));
+      // BS-eco40: Die ~11-Zeichen-Grenze ohne Leerzeichen stammt aus der Firmware
+      // (BLE-Advertising-Name) — als Hinweis am Feld ausweisen. Fuer laengere,
+      // freie Namen gibt es darunter den App-Anzeigenamen (nur Browser-Speicher).
+      h += pf(t('logpar.devName'), txtIn('lp_name', L[5]), t('logpar.devNameHint'));
+      h += pf(t('logpar.alias'), txtIn('lp_alias', getDeviceAlias()), t('logpar.aliasHint'));
       h += pf(t('logpar.utc'), numIn('lp_utc', L[11]), '-43200..43200 s');
       h += '</div>';
       h += '<div class="pp-section"><i class="bi-flag"></i>' + t('logpar.secRec') + '</div>';
@@ -5620,6 +5676,8 @@ z-</textarea>
       const L = P.ip.lines;
       const onv = (id, fn) => { const e = $(id); if (e) e.oninput = e.onchange = fn; };
       onv('lp_name', () => { L[5] = $('lp_name').value; syncIpRaw(); });
+      // BS-eco40: App-Anzeigename sofort speichern + Uebersicht nachziehen.
+      onv('lp_alias', () => { setDeviceAlias($('lp_alias').value); try { updateDeviceCard(); } catch (e) {} });
       onv('lp_utc', () => { L[11] = parseInt($('lp_utc').value, 10) || 0; syncIpRaw(); });
       // record flags (line 12), preserve other bits
       const recFl = () => { let v = L[12]; v = setBit(v, 0, $('lp_rec').checked); v = setBit(v, 1, $('lp_ring').checked); v = setBit(v, 2, $('lp_comp').checked); L[12] = v; syncIpRaw(); };
@@ -5960,21 +6018,25 @@ z-</textarea>
       if (badge) badge.textContent = chans.length + ' / ' + chTblCap();
       // BS-eco40: technische Spalten (PhysChan/MBits/DB-ID/Caps/Extra) sind fuer die
       // normale Einrichtung unnoetig — per Haken zuschaltbar, Standard AUS.
-      const tech = !!($('tblTechCols') && $('tblTechCols').checked);
+      // Kompaktmodus (Standard auf Telefonen AN): nur die fuers Einrichten noetigen
+      // Spalten (#/On/Unit/SDI/Offset/Factor/Aktionen), damit die Tabelle im Quer-
+      // format ohne Seitwaerts-Scrollen bedienbar bleibt.
+      const compact = !!($('tblCompact') && $('tblCompact').checked);
+      const tech = !compact && !!($('tblTechCols') && $('tblTechCols').checked);
+      host.classList.toggle('cmp', compact);
       const th = (key, fallback, cls) => '<th' + (cls ? ' class="' + cls + '"' : '') + '>' + escapeHtml(t(key) || fallback) + '</th>';
       let h = '<thead><tr>'
         + '<th>#</th>'
         + th('tbl.colOn', 'On')
         + th('chpar.unit', 'Unit')
-        + th('chpar.numFmt', 'Format')
-        + th('chpar.srci', 'SrcIdx')
+        + (compact ? '' : th('chpar.numFmt', 'Format') + th('chpar.srci', 'SrcIdx'))
         + th('chpar.sdiAddr', 'SDI-12')
         + th('chpar.offset', 'Offset')
         + th('chpar.multi', 'Factor')
-        + th('chpar.cache', 'Cache')
-        + th('chpar.alarms', 'Alarms')
-        + th('chpar.alarmLo', 'Alarm low')
-        + th('chpar.alarmHi', 'Alarm high')
+        + (compact ? '' : th('chpar.cache', 'Cache')
+          + th('chpar.alarms', 'Alarms')
+          + th('chpar.alarmLo', 'Alarm low')
+          + th('chpar.alarmHi', 'Alarm high'))
         + (tech ? th('chpar.phys', 'PhysChan') + th('chpar.mbits', 'MBits') + th('chpar.dbid', 'DB-ID') + th('chpar.caps', 'Caps') + th('chpar.xbytes', 'Extra') : '')
         + '<th></th>'
         + '</tr></thead><tbody>';
@@ -6001,15 +6063,15 @@ z-</textarea>
           + '<td><button type="button" class="rowno" data-jump="' + i + '" title="' + escapeHtml(t('tbl.jump') || 'Open in the single view below') + '">' + i + '</button></td>'
           + '<td class="c">' + bit(i, 0, getBit(ch[0], 0)) + '</td>'
           + '<td>' + txt(i, 4, ch[4], 'tt u', 8) + '</td>'
-          + '<td><select data-i="' + i + '" data-fmt="1">' + fmtOpts + '</select></td>'
-          + '<td>' + num(i, 3, ch[3], 'tn s') + '</td>'
+          + (compact ? '' : '<td><select data-i="' + i + '" data-fmt="1">' + fmtOpts + '</select></td>'
+            + '<td>' + num(i, 3, ch[3], 'tn s') + '</td>')
           + '<td>' + sdiCell + '</td>'
           + '<td>' + num(i, 7, ch[7]) + '</td>'
           + '<td>' + num(i, 8, ch[8]) + '</td>'
-          + '<td class="c">' + bit(i, 1, getBit(ch[0], 1)) + '</td>'
-          + '<td class="c">' + bit(i, 2, getBit(ch[0], 2)) + '</td>'
-          + '<td>' + num(i, 10, ch[10]) + '</td>'
-          + '<td>' + num(i, 9, ch[9]) + '</td>'
+          + (compact ? '' : '<td class="c">' + bit(i, 1, getBit(ch[0], 1)) + '</td>'
+            + '<td class="c">' + bit(i, 2, getBit(ch[0], 2)) + '</td>'
+            + '<td>' + num(i, 10, ch[10]) + '</td>'
+            + '<td>' + num(i, 9, ch[9]) + '</td>')
           + (tech
               ? '<td>' + num(i, 1, ch[1], 'tn s') + '</td>'
                 + '<td>' + num(i, 11, ch[11], 'tn s') + '</td>'
@@ -6088,6 +6150,13 @@ z-</textarea>
       { const tc = $('tblTechCols');
         if (tc) { tc.checked = lsGet('bsh_tbltech', '0') === '1';
           tc.onchange = () => { lsSet('bsh_tbltech', tc.checked ? '1' : '0'); renderChTable(); }; } }
+      // Kompaktmodus: Zustand merken; Standard AN auf Telefonen, AUS am PC.
+      // Solange kompakt, ist der Technik-Haken wirkungslos -> deaktiviert anzeigen.
+      { const cc = $('tblCompact'), tc = $('tblTechCols');
+        if (cc) { cc.checked = lsGet('bsh_tblcompact', (typeof isPhoneDevice === 'function' && isPhoneDevice()) ? '1' : '0') === '1';
+          const syncTech = () => { if (tc) tc.disabled = cc.checked; };
+          syncTech();
+          cc.onchange = () => { lsSet('bsh_tblcompact', cc.checked ? '1' : '0'); syncTech(); renderChTable(); }; } }
       const rd = $('tblRead');
       if (rd) rd.onclick = () => guard(async () => { await A.ipRead(); renderChTable(); try { renderChParam(); } catch (e) {} });
       const wr = $('tblWrite');
@@ -7583,6 +7652,7 @@ z-</textarea>
       S.modemTerm = false;   // blx.js 250: Modem-Modus faellt mit der Verbindung
       S.dir = []; renderDir();
       S.name = dev.name || 'LTX'; setText('dName', S.name);
+      try { updateDeviceCard(); } catch (e) {}   // BS-eco40: Anzeigename (2. Zeile) nachziehen
       if (btn) { btn.classList.remove('busy'); btn.classList.add('conn'); }
       setText('connectLbl', t('nav.disconnect')); $('connPill').classList.add('on'); setText('connText', S.name);
       { const i = $('connectBtn').querySelector('i'); if (i) i.className = 'bi-bluetooth-connected'; }
@@ -7769,6 +7839,7 @@ z-</textarea>
       try { if (typeof drawArr === 'function') drawArr([]); } catch (e) {} // clear the Graphics chart
       ['dlCsv', 'gCsv', 'smCsv', 'mvCsv'].forEach(id => { const b = $(id); if (b) b.disabled = true; });  // CSV needs fresh data
       setText('dName', '—'); setText('memInfo', '—');                      // dashboard name + storage readout
+      try { updateDeviceCard(); } catch (e) {}                             // BS-eco40: Anzeigename-Zeile ausblenden
       try { setResult(''); } catch (e) {} try { setInfo(''); } catch (e) {}
       // Clear the per-session command/reply log windows (the main Terminal is kept for diagnostics).
       ['sdiOut', 'smartBusOut', 'radioOut'].forEach(id => { const e = $(id); if (e) e.innerHTML = ''; });
@@ -8034,7 +8105,7 @@ z-</textarea>
       ipRead: () => guard(async () => {
         const b = await getFile('iparam.lxp'); const text = dec.decode(b);
         $('ipText').value = text;
-        try { P.ip = parseIparam(text); renderIparam(); updateLoggerStatus(); toast('Device parameters read (' + P.ip.chans.length + ' channels).', 'ok'); }
+        try { P.ip = parseIparam(text); renderIparam(); updateLoggerStatus(); try { updateDeviceCard(); } catch (e2) {} toast('Device parameters read (' + P.ip.chans.length + ' channels).', 'ok'); }
         catch (e) { P.ip = null; renderIparam(); clearMeasState(); $('ipRawWrap').style.display = ''; toast(e.message + ' — showing raw view.', 'warn'); }
       }),
       ipWrite: () => guard(async () => {
@@ -8133,7 +8204,7 @@ z-</textarea>
 
       switch (c0) {
         case '.?': case '.help':
-          say('ecoLOG 4.0 · Basis BS27F · SysCommands:');
+          say('ecoLog 4.0 · Basis BS27F · SysCommands:');
           say('.? Hilfe · .cls leeren · .q zum Dashboard · .rs 0|1 RSSI-Zeilen · .k 0|1 Verbindung halten');
           say('.bfast/.bslow BLE-Tempo · .sl MS warten · .c [PIN] verbinden · .d trennen · .i identifizieren');
           say('.m Speicher (v) · .t [set] Uhr lesen/stellen · .u Daten laden · .p Datei zum Geraet');
@@ -8266,7 +8337,7 @@ z-</textarea>
         case '.a': case '.audio': case '.f': case '.cf': case '.connectionfast':
         case '.l': case '.lines': case '.x': case '.xtract': case '.memput': case '.fput':
         case '.crun': case '.expect': case '.shell': case '.devicelist':
-          err(c0 + ' ist in ecoLOG 4.0 nicht portiert. Alternativen: Daten/Grafik ueber "Speicher & Daten", Dateien ueber das Directory, Firmware ueber .firmware.');
+          err(c0 + ' ist in ecoLog 4.0 nicht portiert. Alternativen: Daten/Grafik ueber "Speicher & Daten", Dateien ueber das Directory, Firmware ueber .firmware.');
           return;
         default:
           err('Unbekannter SysCommand: ' + c0 + '  (.? zeigt die Liste)');
@@ -10809,7 +10880,10 @@ z-</textarea>
         'logpar.netMode': 'Internet Mode', 'logpar.errPol': 'Error Policy', 'logpar.minTemp': 'Min. Internet Temp (°C)',
         'logpar.hkBat': 'Battery Voltage', 'logpar.hkTemp': 'Temperature', 'logpar.hkHum': 'Humidity', 'logpar.hkPerc': 'Battery Capacity', 'logpar.hkBaro': 'Barometric Pressure',
         'logpar.hkReload': 'HK Reload',
-        'chpar.nav': 'Kanal Parameter', 'chpar.h1': 'Kanal Parameter',
+        'logpar.devNameHint': 'Bluetooth name in the logger — firmware limit: max. 11 characters, no spaces',
+        'logpar.alias': 'Display name (app only)', 'logpar.aliasHint': 'Free text — stored in this browser and shown in the overview under the serial number',
+        'tbl.compact': 'Compact (phone)', 'mv.expert': 'Expert mode (all functions)',
+        'chpar.nav': 'Channel parameters', 'chpar.h1': 'Channel parameters',
         'chpar.sub': 'Per-channel settings — units, scaling, alarms and helpers. Saved to iparam.lxp.',
         'chpar.read': 'Read', 'chpar.save': 'Save & apply',
         'chpar.down': 'Channel Down', 'chpar.up': 'Channel Up', 'chpar.channels': 'Channels',
@@ -11091,6 +11165,9 @@ z-</textarea>
         'logpar.netMode': 'Internet-Modus', 'logpar.errPol': 'Fehler-Strategie', 'logpar.minTemp': 'Min. Internet-Temp. (°C)',
         'logpar.hkBat': 'Batteriespannung', 'logpar.hkTemp': 'Temperatur', 'logpar.hkHum': 'Feuchte', 'logpar.hkPerc': 'Batteriekapazität', 'logpar.hkBaro': 'Luftdruck',
         'logpar.hkReload': 'HK-Reload',
+        'logpar.devNameHint': 'Bluetooth-Name im Logger — Firmware-Grenze: max. 11 Zeichen, keine Leerzeichen',
+        'logpar.alias': 'Anzeigename (nur App)', 'logpar.aliasHint': 'Freier Text — wird in diesem Browser gespeichert und in der Übersicht unter der Seriennummer angezeigt',
+        'tbl.compact': 'Kompakt (Handy)', 'mv.expert': 'Expert-Modus (alle Funktionen)',
         'chpar.nav': 'Kanal-Parameter', 'chpar.h1': 'Kanal-Parameter',
         'chpar.sub': 'Einstellungen je Kanal — Einheiten, Skalierung, Alarme und Helfer. Speichert in iparam.lxp.',
         'chpar.read': 'Lesen', 'chpar.save': 'Speichern & anwenden',
@@ -12372,6 +12449,9 @@ z-</textarea>
       const mvc = $('mvConnectBtn'); if (mvc) mvc.onclick = () => { buzz(15); S.connected ? disconnect() : connect(); };
       const mvlb = $('mvLangBtn'); if (mvlb) mvlb.onclick = (e) => { e.stopPropagation(); toggleLangMenuFor(mvlb); };
       const mvmb = $('mvModeBtn'); if (mvmb) mvmb.onclick = openLanding;
+      // BS-eco40: Kachel "Expert-Modus" — voller Funktionsumfang direkt aus der
+      // Smartphone-Ansicht (auf Telefonen die Smartphone-Expert-Variante).
+      const mvx = $('mvExpertTile'); if (mvx) mvx.onclick = () => { buzz(12); chooseMode((typeof isPhoneDevice === 'function' && isPhoneDevice()) ? 'expertmobile' : 'expert'); };
       // Panels reuse Expert actions.
       const mvMeas = $('mvMeasure'); if (mvMeas) mvMeas.onclick = () => { buzz(12); A.measure(); };
       const mvClr = $('mvClear'); if (mvClr) mvClr.onclick = () => { buzz(20); A.clearMem(); };
@@ -12440,7 +12520,9 @@ z-</textarea>
       $('designModal').addEventListener('click', (e) => { if (e.target.id === 'designModal') $('designModal').classList.remove('open'); });
       $('opt3d').onchange = () => apply3D($('opt3d').checked);
       $('optLight').onchange = () => applyLight($('optLight').checked);
-      applyLight(lsGet('bsh_theme', 'dark') === 'light');
+      // BS-eco40: Standard ist der HELLE Modus (GF-Vorgabe 31.08.2026); eine vom
+      // Nutzer getroffene Wahl (bsh_theme) bleibt weiterhin gespeichert.
+      applyLight(lsGet('bsh_theme', 'light') === 'light');
       apply3D(lsGet('bsh_3d', '0') === '1');
       applyPalette(lsGet('bsh_palette', 'slate'));
       // Text/UI size A− / A+ (header + Simple bar; wired by class so both reuse one handler).
@@ -12481,7 +12563,7 @@ z-</textarea>
             const fresh = Math.abs(Date.now() - d.getTime()) < 120000;   // ~now => no real header, keep fallback
             if (!isNaN(d.getTime()) && !fresh) {
               const p2 = (n) => ('0' + n).slice(-2);
-              el.textContent = 'ecoLOG 4.0 · ' + p2(d.getDate()) + '.' + p2(d.getMonth() + 1) + '.' + d.getFullYear() + ' ' + p2(d.getHours()) + ':' + p2(d.getMinutes());
+              el.textContent = 'ecoLog 4.0 · ' + p2(d.getDate()) + '.' + p2(d.getMonth() + 1) + '.' + d.getFullYear() + ' ' + p2(d.getHours()) + ':' + p2(d.getMinutes());
             }
           } catch (e) {}
         } }

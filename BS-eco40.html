@@ -12522,6 +12522,11 @@ z-</textarea>
       $('optLight').onchange = () => applyLight($('optLight').checked);
       // BS-eco40: Standard ist der HELLE Modus (GF-Vorgabe 31.08.2026); eine vom
       // Nutzer getroffene Wahl (bsh_theme) bleibt weiterhin gespeichert.
+      // Einmalige Umstellung noetig, weil fruehere Builds den alten Dunkel-
+      // Standard bei JEDEM Start ungefragt in bsh_theme geschrieben haben —
+      // dieser Altwert ist keine bewusste Nutzerwahl und wuerde die Vorgabe
+      // fuer alle Bestandsnutzer aushebeln. Ab dem Flag zaehlt die Wahl wieder.
+      if (lsGet('bsh_theme_v2', '') !== '1') { lsSet('bsh_theme', 'light'); lsSet('bsh_theme_v2', '1'); }
       applyLight(lsGet('bsh_theme', 'light') === 'light');
       apply3D(lsGet('bsh_3d', '0') === '1');
       applyPalette(lsGet('bsh_palette', 'slate'));

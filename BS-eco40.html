@@ -1885,8 +1885,14 @@
       --txt: #0f2b31;
       --muted: #38626c;
       --faint: #5f8390;
-      background: linear-gradient(165deg, #e9f3f4 0%, #d6e8eb 55%, #c6dee2 100%) !important;
-      background-attachment: fixed;
+      /* LANGFORMEN, nicht das background-Shorthand: dessen !important setzt
+         implizit auch attachment:scroll !important und schlaegt das fixed —
+         der Verlauf war dann nur viewport-hoch und KACHELTE auf langen Seiten
+         (harte hell/dunkel-Kante, Tester-Screenshot Simple Mode 31.08.). */
+      background-color: #d6e8eb !important;
+      background-image: linear-gradient(165deg, #e9f3f4 0%, #d6e8eb 55%, #c6dee2 100%) !important;
+      background-attachment: fixed !important;
+      background-repeat: no-repeat !important;
     }
     /* Drop the animated ocean/aurora backdrop and all blur so surfaces read as solid panels. */
     html.bs-contrast body::before,

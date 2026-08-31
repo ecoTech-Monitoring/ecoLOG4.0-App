@@ -7,7 +7,10 @@
   BLE protocol & device types reimplemented from the MIT-licensed work of
   JoEmbedded (https://github.com/joembedded/ltx_ble_demo). Independent UI/redesign.
 -->
-<html lang="en">
+<!-- BS-eco40: bs-contrast FEST — es gibt nur noch EIN Design (das kontraststarke
+     "Original"); der fruehere Aqua-Glass-Umschalter wurde auf Nutzerwunsch entfernt
+     (31.08.2026: "zwischen Hell und Dunkel waehlen reicht"). -->
+<html lang="en" class="bs-contrast">
 
 <head>
   <meta charset="UTF-8">
@@ -190,7 +193,8 @@
         btn.id = 'bsInstallBtn';
         btn.type = 'button';
         btn.textContent = '⤓ ' + L().btn;
-        btn.style.cssText = 'position:fixed;z-index:9999;left:14px;bottom:14px;padding:11px 16px;border:0;border-radius:12px;cursor:pointer;font:600 14px system-ui,sans-serif;color:#06102b;background:linear-gradient(135deg,#22d3ee,#2dd4bf);box-shadow:0 10px 30px rgba(0,0,0,.35)';
+        // BS-eco40: deutlich groesser (Tester: "sehr klein, links unten") + CI-Petrol.
+        btn.style.cssText = 'position:fixed;z-index:9999;left:16px;bottom:16px;padding:15px 24px;border:0;border-radius:15px;cursor:pointer;font:700 16.5px system-ui,sans-serif;color:#04262c;background:linear-gradient(135deg,#3fc9d6,#19aebe);box-shadow:0 12px 34px rgba(4,38,44,.45)';
         btn.onclick = showInstallDialog;
         document.body.appendChild(btn);
       });
@@ -284,7 +288,10 @@
     [data-theme="light"] .chrow .ci,
     [data-theme="light"] .readout b { filter: brightness(.55) saturate(1.5); }
     * { box-sizing: border-box; }
-    html, body { margin: 0; height: 100%; }
+    /* BS-eco40: Pull-to-Refresh global unterbinden — ein versehentliches starkes
+       Herunterziehen loeste (v. a. in der installierten App) einen Reload aus und
+       warf den Nutzer mitten aus der Einrichtung zurueck auf die Startseite. */
+    html, body { margin: 0; height: 100%; overscroll-behavior-y: none; }
     body {
       background:
         radial-gradient(1100px 680px at 78% -12%, rgba(56,189,248,.20), transparent 60%),
@@ -362,10 +369,12 @@
     #langBtn i, #smLangBtn i, #mvLangBtn i { font-size: 14px; }
     #langBtn span, #smLangBtn span, #mvLangBtn span { font-size: 10px !important; font-weight: 800 !important; letter-spacing: .4px; }
     @media (max-width: 520px) { .mv-brand .modetag { display: none; } }   /* auf sehr schmalen Handys: Chip weglassen statt ueberlaufen */
-    .bname { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; font-size: 19px; letter-spacing: .3px;
-      background: linear-gradient(120deg, #e8f9ff, #7fe7ff 60%, #a7f3e4); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .bname i { color: var(--aqua); font-size: 17px; -webkit-text-fill-color: var(--aqua); filter: drop-shadow(0 0 6px rgba(34,211,238,.55)); }
-    [data-theme="light"] .bname { background: none; color: var(--txt); -webkit-text-fill-color: currentColor; }
+    /* BS-eco40: .bname ist nur noch der STRUKTUR-Wrapper (Icon + zweizeiliger
+       brandcol-Block, identisch zu Simple/Smartphone-Kopf) — der Farbverlauf
+       des App-Namens kommt aus .brandcol .appname. Kein Text-Gradient mehr am
+       Wrapper, sonst wuerde er die "ecoTech Monitoring"-Zeile mit einfaerben. */
+    .bname { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: .3px; }
+    .bname i { color: var(--aqua); font-size: 20px; -webkit-text-fill-color: var(--aqua); filter: drop-shadow(0 0 6px rgba(34,211,238,.55)); }
     .hmenu { display: none; background: none; border: 0; color: var(--txt); font-size: 22px; cursor: pointer; }
     @media (max-width: 860px) { .hmenu { display: block; } }
     .spacer { flex: 1; }
@@ -1843,19 +1852,21 @@
       background: #061627 !important;
       background-image: none !important;
     }
+    /* BS-eco40 (31.08.): Heller Modus in ecoTech-CI-Toenung (Petrol #19aebe) und mit
+       MEHR Kontrast zwischen Hintergrund und den weissen Kacheln (Nutzerwunsch). */
     html.bs-contrast body[data-theme="light"] {
       --panel: #ffffff;
-      --panel2: #f2f8ff;
+      --panel2: #f1f8f9;
       --glass-fill: #ffffff;
-      --glass-fill-2: #f2f8ff;
-      --well: #eaf2fb;
-      --stroke: rgba(20,60,90,.32);
-      --stroke2: rgba(20,60,90,.46);
-      --txt: #0b1c33;
-      --muted: #33506f;
-      --faint: #5a7690;
-      background: #e6eef7 !important;
-      background-image: none !important;
+      --glass-fill-2: #f1f8f9;
+      --well: #e3eef0;
+      --stroke: rgba(13,90,102,.30);
+      --stroke2: rgba(13,90,102,.46);
+      --txt: #0f2b31;
+      --muted: #38626c;
+      --faint: #5f8390;
+      background: linear-gradient(165deg, #e9f3f4 0%, #d6e8eb 55%, #c6dee2 100%) !important;
+      background-attachment: fixed;
     }
     /* Drop the animated ocean/aurora backdrop and all blur so surfaces read as solid panels. */
     html.bs-contrast body::before,
@@ -1874,7 +1885,7 @@
        Hintergrund hart verdrahtet und galt auch im Hellmodus — schwarze Felder mit
        schwarzer Schrift. */
     html.bs-contrast body { --inp-bg: rgba(5,16,34,.96); --inp-border: var(--stroke); }
-    html.bs-contrast body[data-theme="light"] { --inp-bg: #ffffff; --inp-border: rgba(20,60,90,.45); }
+    html.bs-contrast body[data-theme="light"] { --inp-bg: #ffffff; --inp-border: rgba(13,90,102,.45); }
     html.bs-contrast input, html.bs-contrast textarea, html.bs-contrast select {
       /* Langformen statt background-Shorthand: Chromium verliert bei
          "background: var(...) !important" das !important beim Aufloesen. */
@@ -1915,38 +1926,69 @@
       background: linear-gradient(120deg, #22d3ee, #2dd4bf) !important;
       border-color: transparent !important;
     }
+
+    /* ============================================================
+       BS-eco40 (31.08.): HELLE Startseite. Die Landing oben ist in der
+       Basisschicht hart dunkel gestylt (feste Farben, kein Token) — der
+       Startbildschirm blieb deshalb auch im hellen Standard dunkel.
+       Alle Flaechen hier komplett hell in ecoTech-CI uebersteuern.
+       (Steht bewusst NACH den dunklen Landing-Regeln: gleiche
+       Spezifitaet + !important -> die spaetere Regel gewinnt.)
+       ============================================================ */
+    html.bs-contrast body[data-theme="light"] #landing {
+      background: linear-gradient(165deg, #eef6f7 0%, #d9eaed 55%, #c9e1e5 100%) !important;
+    }
+    html.bs-contrast body[data-theme="light"] .land-card {
+      background: #ffffff !important;
+      border-color: rgba(13,126,140,.30) !important;
+      box-shadow: 0 26px 64px rgba(10,60,70,.16) !important;
+    }
+    html.bs-contrast body[data-theme="light"] .land-mode {
+      background: #ffffff !important;
+      border-color: rgba(13,126,140,.26) !important;
+      box-shadow: 0 12px 28px rgba(10,60,70,.10) !important;
+    }
+    html.bs-contrast body[data-theme="light"] .land-mode:hover {
+      border-color: #19aebe !important;
+      box-shadow: 0 16px 36px rgba(10,60,70,.16) !important;
+    }
+    html.bs-contrast body[data-theme="light"] .land-mode .lm-t { color: #123a42; }
+    html.bs-contrast body[data-theme="light"] .land-mode .lm-d { color: #47707b; }
+    html.bs-contrast body[data-theme="light"] .land-mode .lm-ic { color: #0d7e8c; filter: none; }
+    html.bs-contrast body[data-theme="light"] .land-mode .lm-for { color: #5a8794; }
+    html.bs-contrast body[data-theme="light"] .land-mode .lm-go { color: #0d7e8c; }
+    html.bs-contrast body[data-theme="light"] .land-sub {
+      background: #ffffff !important;
+      border-color: rgba(13,126,140,.32) !important;
+      color: #123a42 !important;
+    }
+    html.bs-contrast body[data-theme="light"] .land-sub i { color: #0d7e8c; }
+    html.bs-contrast body[data-theme="light"] .land-sub .ls-rec { color: #0d7e8c; }
+    html.bs-contrast body[data-theme="light"] .land-lang {
+      background: #ffffff !important;
+      border-color: rgba(13,126,140,.32) !important;
+      color: #123a42 !important;
+    }
+    html.bs-contrast body[data-theme="light"] .land-lang.active {
+      background: linear-gradient(120deg, #19aebe, #0d7e8c) !important;
+      color: #ffffff !important;
+    }
+    html.bs-contrast body[data-theme="light"] .land-tag { color: #47707b; }
+    html.bs-contrast body[data-theme="light"] .land-note { color: #6b8b95; }
+    html.bs-contrast body[data-theme="light"] .land-ver { color: #7a99a2; }
+    html.bs-contrast body[data-theme="light"] .land-brand {
+      background: linear-gradient(120deg, #19aebe 0%, #0d7e8c 80%);
+      -webkit-background-clip: text; background-clip: text;
+      filter: none;
+    }
   </style>
   <script>
-    (function () {
-      function el(id) { return document.getElementById(id); }
-      function setState(d) {
-        // Self-contained: gate the inline high-contrast overrides with a class on <html>.
-        // The Aqua-Glass stylesheet ALWAYS stays active, so the page can never end up unstyled,
-        // even if a companion file is missing on the server.
-        document.documentElement.classList.toggle('bs-contrast', d === 'original');
-      }
-      function apply(d) {
-        setState(d);
-        window.__bsDesign = d;
-        try { localStorage.setItem('bsh_design', d); } catch (e) {}
-        var btns = document.querySelectorAll('.bs-design-switch');
-        for (var i = 0; i < btns.length; i++) {
-          btns[i].classList.toggle('on', d === 'original');
-          btns[i].setAttribute('aria-pressed', d === 'original' ? 'true' : 'false');
-          btns[i].title = (d === 'original') ? 'Design: Original — switch to Aqua Glass' : 'Design: Aqua Glass — switch to Original';
-        }
-      }
-      var saved = 'original';   // first visit: high-contrast design (better legibility, esp. on phones). After that, remember the last chosen design.
-      try { var s = localStorage.getItem('bsh_design'); if (s === 'glass' || s === 'original') saved = s; } catch (e) {}
-      window.__bsDesign = saved;
-      setState(saved);   // apply immediately (the style/link above already exist) to avoid a flash
-      window.__bsToggleDesign = function () { apply(window.__bsDesign === 'original' ? 'glass' : 'original'); };
-      document.addEventListener('DOMContentLoaded', function () {
-        var btns = document.querySelectorAll('.bs-design-switch');
-        for (var i = 0; i < btns.length; i++) btns[i].onclick = window.__bsToggleDesign;
-        apply(window.__bsDesign);
-      });
-    })();
+    // BS-eco40 (31.08.2026): Der Aqua-Glass/Original-Umschalter wurde entfernt —
+    // Nutzerwunsch: "Zwischen Hell und Dunkel zu waehlen reicht den Anwendern."
+    // Das kontraststarke Design ist jetzt FEST aktiv (class="bs-contrast" am
+    // <html>-Tag); das Aqua-Glass-Stylesheet bleibt als Basisschicht darunter
+    // bestehen (Minimal-Diff zu BS27F, und die Token-Overrides brauchen es).
+    // Frueher gespeicherte Design-Wahlen (bsh_design) sind damit bedeutungslos.
   </script>
 </head>
 
@@ -2010,7 +2052,6 @@
         <button class="font-inc" type="button" title="Larger text" aria-label="Larger text">A+</button>
       </span>
       <button class="iconbtn" id="smLangBtn" type="button" title="Language" aria-label="Language" aria-haspopup="true" aria-expanded="false" style="width:auto; padding:0 11px; gap:7px"><i class="bi-translate"></i><span id="smLangLbl" style="font-size:12.5px; font-weight:700">EN</span></button>
-      <button class="iconbtn on bs-design-switch" id="smDesignSwitchBtn" type="button" title="Design wechseln: Aqua Glass / Original" aria-label="Switch design" aria-pressed="false"><i class="bi-layers"></i></button>
       <button class="iconbtn" id="smThemeBtn" type="button" title="Toggle theme" aria-label="Toggle light mode" aria-pressed="false"><i class="bi-moon-stars"></i></button>
       <button class="iconbtn" id="smModeBtn" type="button" title="Mode" aria-label="Mode"><i class="bi-house"></i></button>
     </div>
@@ -2167,7 +2208,6 @@
       <div class="spacer"></div>
       <button class="connectbtn" id="mvConnectBtn" type="button"><i class="bi-bluetooth"></i><span id="mvConnectLbl" data-i18n="nav.connect">Connect</span></button>
       <button class="mv-icbtn" id="mvLangBtn" type="button" title="Language" aria-label="Language" aria-haspopup="true" aria-expanded="false"><i class="bi-translate"></i><span id="mvLangLbl">EN</span></button>
-      <button class="mv-icbtn on bs-design-switch" id="mvDesignSwitchBtn" type="button" title="Design wechseln: Aqua Glass / Original" aria-label="Switch design" aria-pressed="false"><i class="bi-layers"></i></button>
       <button class="mv-icbtn" id="mvModeBtn" type="button" title="Mode" aria-label="Mode"><i class="bi-house"></i></button>
     </div>
 
@@ -2335,9 +2375,11 @@
 
     <header>
       <button class="hmenu" id="hmenu" type="button" aria-label="Menu" title="Menu" aria-expanded="false" aria-controls="sidebar"><i class="bi-list"></i></button>
+      <!-- BS-eco40: Markenblock vereinheitlicht — ueberall dasselbe Muster wie in
+           Simple/Smartphone: Bluetooth-Zeichen LINKS NEBEN dem zweizeiligen Block
+           (oben klein "ecoTech Monitoring", darunter App-Name + Modus-Chip). -->
       <div class="brand">
-        <span id="gpWord" class="gpword"><b class="ecoteal">eco</b><b class="ecoink">Tech</b> Monitoring</span>
-        <span class="bname"><i class="bi-bluetooth"></i>ecoLog 4.0 <span class="modetag" data-i18n="land.expert">Expert Mode</span></span>
+        <span class="bname"><i class="bi-bluetooth"></i><span class="brandcol"><span id="gpWord" class="gpword"><b class="ecoteal">eco</b><b class="ecoink">Tech</b> Monitoring</span><span class="appname">ecoLog 4.0 <span class="modetag" data-i18n="land.expert">Expert Mode</span></span></span></span>
       </div>
       <div class="spacer"></div>
       <!-- Compact Connect button: visible only in Expert-smartphone mode so the user can
@@ -2350,8 +2392,8 @@
         <button class="font-dec" type="button" title="Smaller text" aria-label="Smaller text">A−</button>
         <button class="font-inc" type="button" title="Larger text" aria-label="Larger text">A+</button>
       </span>
-      <button class="iconbtn on bs-design-switch" id="designSwitchBtn" type="button" title="Design wechseln: Aqua Glass / Original" aria-label="Switch design" aria-pressed="false"><i class="bi-layers"></i></button>
-      <!-- BS-eco40: Farbpaletten-Menue entfernt — Grunddesign + Aqua-Glass-Umschalter genuegen -->
+      <!-- BS-eco40: Farbpaletten-Menue und Design-Umschalter entfernt — es gibt nur
+           noch das kontraststarke Design mit Hell/Dunkel (Nutzerwunsch 31.08.). -->
 
       <button class="iconbtn" id="langBtn" type="button" title="Language" aria-label="Language" aria-haspopup="true" aria-expanded="false" style="width:auto; padding:0 11px; gap:7px"><i class="bi-translate"></i><span id="langLbl" style="font-size:12.5px; font-weight:700">EN</span></button>
       <button class="iconbtn" id="themeBtn" type="button" title="Toggle theme" aria-label="Toggle light mode" aria-pressed="false"><i class="bi-moon-stars"></i></button>

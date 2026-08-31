@@ -1487,8 +1487,9 @@
     body.mode-expert-mobile #bsInstallBtn {
       bottom: calc(78px + env(safe-area-inset-bottom, 0px)) !important;
     }
-    /* Expert-smartphone: no app-install button (neither the Übersicht "App" card nor the floating prompt). */
-    body.mode-expert-mobile #dInstallCard,
+    /* Expert-smartphone: no floating app-install button. (The Übersicht "App"
+       card was removed entirely on 31.08. — the floating prompt is the one
+       install entry point everywhere else.) */
     body.mode-expert-mobile #bsInstallBtn { display: none !important; }
     /* BS-eco40 (31.08.): Kopfleiste der Expert-Smartphone-Ansicht so schlicht wie
        die der Smartphone-Version (Nutzerwunsch): die "Disconnected"-Pille fliegt
@@ -2479,7 +2480,7 @@
         <h1 class="h1"><i class="bi-grid-1x2"></i><span data-i18n="dash.h1">Dashboard</span></h1>
         <p class="sub" data-i18n="dash.sub">Connect to an LTX data logger or sensor and control it over Web Bluetooth.</p>
 
-        <div class="grid cols-5" id="dHeadStats" style="margin-bottom:16px">
+        <div class="grid cols-4" id="dHeadStats" style="margin-bottom:16px">
           <div class="card stat"><span class="k" data-i18n="dash.device">Device</span><span class="v sm" id="dName">—</span>
             <!-- BS-eco40: 2. Zeile = vergebener Anzeigename (App-Alias oder iparam-Name);
                  der BLE-Name darueber bleibt die Seriennummer/Kennung des Loggers. -->
@@ -2493,7 +2494,8 @@
             </div>
           </div>
           <div class="card stat" id="dFwCard" style="flex-direction:row; align-items:center; gap:10px"><div style="display:flex; flex-direction:column; min-width:0; flex:1 1 auto"><span class="k" data-i18n="dash.firmware">Firmware</span><span class="v" id="dFw">—</span></div><button class="btn" id="dFwUpdate" type="button" style="display:none; padding:6px 11px; flex:0 0 auto; white-space:nowrap" data-i18n-title="tip.fwUpdate"><i class="bi-cpu"></i> <span data-i18n="dash.fwUpdate">Firmware-Update</span></button><input type="file" id="fwFile" accept=".sec" style="display:none"></div>
-          <div class="card stat" id="dInstallCard"><span class="k">App</span><button class="btn primary" id="dashInstall" type="button" style="margin-top:4px; padding:7px 12px; align-self:flex-start"><i class="bi-download"></i> <span id="dashInstallTxt">Install App</span></button></div>
+          <!-- BS-eco40 (31.08.): "App"-Karte mit Install-Knopf entfernt — der
+               schwebende "App installieren"-Knopf unten links genuegt (Doppelung). -->
         </div>
 
         <div class="grid cols-2">

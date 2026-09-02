@@ -10,14 +10,19 @@
      this one always picks up new builds while staying offline-capable.
    - Everything else (icons, CDN css/js/fonts): cache first, refreshed
      in the background (stale-while-revalidate). */
-const CACHE = 'bs-eco40-v2';
+/* BS-eco40 (02.09.2026): v3 — neue Logo-Bildmarke. Der Bump raeumt den v2-Cache
+   ab, in dem Bestandsinstallationen sonst EWIG die alten Icons behielten
+   (Assets sind cache-first). Die ?v=2-Suffixe an den Icon-URLs erneuern
+   zusaetzlich Favicon-Cache und die Icons bereits installierter Apps. */
+const CACHE = 'bs-eco40-v3';
 const SHELL = [
   'BS-eco40.html',
   'blNewStore.js',
   'manifest-bs-eco40.webmanifest',
-  'icon.svg',
-  'icon-192.png',
-  'icon-512.png',
+  'icon.svg?v=2',
+  'icon-192.png?v=2',
+  'icon-512.png?v=2',
+  'icon-512-maskable.png?v=2',
   // Bibliotheken lokal gebuendelt (vendor/) — kein CDN im Precache mehr
   'vendor/bootstrap-icons/bootstrap-icons.min.css',
   'vendor/bootstrap-icons/fonts/bootstrap-icons.woff2',

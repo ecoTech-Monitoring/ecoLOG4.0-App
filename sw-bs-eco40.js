@@ -14,7 +14,8 @@
    ab, in dem Bestandsinstallationen sonst EWIG die alten Icons behielten
    (Assets sind cache-first). Die ?v=2-Suffixe an den Icon-URLs erneuern
    zusaetzlich Favicon-Cache und die Icons bereits installierter Apps. */
-const CACHE = 'bs-eco40-v3';
+/* v4 (02.09.): Umbenennung enviLog 4.0 — Manifest/HTML muessen frisch kommen. */
+const CACHE = 'bs-eco40-v4';
 const SHELL = [
   'BS-eco40.html',
   'blNewStore.js',

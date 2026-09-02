@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
-  ecoLog 4.0 (ecoTech Monitoring) — Web Bluetooth console for ecoTech / LTX data loggers & sensors
+  enviLog 4.0 (ecoTech Monitoring) — Web Bluetooth console for ecoTech / LTX data loggers & sensors
   Basis: BlueShell 27F, Build 21.07.2026 (https://geo-precision.com/media/apps/BS27F/), gepflegt von ecoTech.
   Single-file build. Cross-browser + mobile (Android Chrome / iOS Bluefy) hardened build. Real Web Bluetooth (Chrome / Edge / Opera on Win/Android/Linux/macOS).
 
@@ -20,7 +20,7 @@
        Technologie Ueberwachung", "Load Data" -> "Datenbeladen"). -->
   <meta name="google" content="notranslate">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
-  <meta name="description" content="ecoLog 4.0 — Web Bluetooth console for ecoTech data loggers and sensors (based on BlueShell 27F)">
+  <meta name="description" content="enviLog 4.0 — Web Bluetooth console for ecoTech data loggers and sensors (based on BlueShell 27F)">
   <!-- BS-eco40 (02.09.): hell-first — Startbildschirm der installierten App hell,
        Browser-/App-Leiste in CI-Petrol (passend zu manifest background/theme). -->
   <meta name="theme-color" content="#19aebe">
@@ -32,7 +32,7 @@
   <link rel="apple-touch-icon" href="icon-192.png?v=2">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="ecoLog 4.0">
+  <meta name="apple-mobile-web-app-title" content="enviLog 4.0">
   <script>
     // --- PWA: install as a local app + offline shell (Chromium browsers) ---
     // A service worker cannot register on file://, so opening the file directly still works as a
@@ -218,7 +218,7 @@
     body[data-theme="dark"]  { --ecoInk: #e4e9f1; }
     body[data-theme="light"] { --ecoInk: #3e3d40; }
   </style>
-  <title>ecoLog 4.0</title>
+  <title>enviLog 4.0</title>
   <style id="bsThemeGlass">
     /* ============================================================
        "AQUA GLASS" — a deep-ocean glassmorphism theme.
@@ -358,7 +358,7 @@
     .ecoteal { color: #19aebe !important; -webkit-text-fill-color: #19aebe; font-weight: 500; }
     .ecoink { color: var(--ecoInk, var(--muted)); -webkit-text-fill-color: var(--ecoInk, var(--muted)); font-weight: 700; }
     /* BS-eco40: zweizeiliger Markenblock in Simple/Mobile — ecoTech Monitoring klein
-       oben, darunter der App-Name ecoLog 4.0 mit Modus-Chip (wie im Expert-Kopf) */
+       oben, darunter der App-Name enviLog 4.0 mit Modus-Chip (wie im Expert-Kopf) */
     .brandcol { display: flex; flex-direction: column; line-height: 1.2; gap: 1px; }
     .brandcol .gpword { font-size: 11px; }
     /* BS-eco40 (31.08.): App-Name im LOGO-Stil statt Farbverlauf ("nicht so
@@ -1176,13 +1176,27 @@
     body.mode-expert-mobile #emConnectBtn.conn {
       background: var(--panel); color: var(--red); border: 1px solid var(--red); box-shadow: none; }
     body.mode-expert-mobile #emConnectBtn.busy { filter: grayscale(.3) brightness(.95); }
-    /* Dim backdrop behind the open drawer for clear focus + tap-to-close. */
+    /* Dim backdrop behind the open drawer for clear focus + tap-to-close.
+       BS-eco40 (02.09.): Zwei Fehler behoben — (a) display:block fehlte in den
+       Modus-Regeln, die Basisregel display:none gewann IMMER (der Tipp-daneben-
+       Schliesser war dadurch komplett wirkungslos); (b) der Backdrop galt nur
+       fuer die Expert-Smartphone-Ansicht, nicht fuer den schmalen Voll-Expert
+       (Tablet hochkant), der denselben Drawer nutzt. */
     .em-backdrop { display: none; }
     body.mode-expert-mobile .em-backdrop {
-      position: fixed; inset: 0; z-index: 48; background: rgba(2,10,24,.55);
+      display: block; position: fixed; inset: 0; z-index: 48; background: rgba(2,10,24,.55);
       backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
       opacity: 0; pointer-events: none; transition: opacity .22s; }
     body.mode-expert-mobile .em-backdrop.show { opacity: 1; pointer-events: auto; }
+    /* Achtung: der Voll-Expert traegt KEINE mode-Klasse am body (er ist der
+       Default) — deshalb ohne body-Praefix; in Simple/Smartphone ist das .app-
+       Layout samt Drawer ohnehin ausgeblendet und .show wird dort nie gesetzt. */
+    @media (max-width: 860px) {
+      .em-backdrop {
+        display: block; position: fixed; inset: 0; z-index: 39; background: rgba(2,10,24,.55);
+        opacity: 0; pointer-events: none; transition: opacity .22s; }
+      .em-backdrop.show { opacity: 1; pointer-events: auto; }
+    }
 
     /* Content: comfortable padding, momentum scroll, room for the bottom nav. */
     body.mode-expert-mobile main {
@@ -1246,7 +1260,7 @@
     .sm-bar .sm-brand i { color: var(--accent); }
     .sm-bar .sm-brand .tag { font-size: 11px; font-weight: 700; color: var(--muted); background: var(--panel);
       border: 1px solid var(--stroke); border-radius: 999px; padding: 2px 9px;
-      /* im Gradient-Text des .appname lesbar bleiben + mittig auf ecoLog-4.0-Hoehe sitzen */
+      /* im Gradient-Text des .appname lesbar bleiben + mittig auf enviLog-4.0-Hoehe sitzen */
       -webkit-text-fill-color: var(--muted); align-self: center; line-height: 1.4; }
     .sm-bar .spacer { flex: 1; }
     .sm-main { padding: clamp(18px, 3vw, 34px); max-width: 920px; margin: 0 auto; width: 100%; }
@@ -2033,6 +2047,37 @@
     html.bs-contrast .mv-bigbtn {
       color: #ffffff !important;
     }
+
+    /* BS-eco40 (02.09.): VERBUNDEN = Trennen-Knopf in sattem Rot. Die Basis
+       nutzte 12 % Hellrot mit rotem Text — als Trennen-Aktion kaum erkennbar. */
+    html.bs-contrast .connectbtn.conn,
+    html.bs-contrast body.mode-expert-mobile #emConnectBtn.conn {
+      background: linear-gradient(135deg, #ef4444, #b91c1c) !important;
+      color: #ffffff !important;
+      border: 0 !important;
+      box-shadow: 0 8px 24px rgba(185,28,28,.35) !important;
+    }
+
+    /* BS-eco40 (02.09.): Der Seiten-Drawer (drei Striche) bleibt bewusst DUNKEL —
+       auch im hellen Modus (Nutzerwunsch). Dann muessen aber Schrift/Icons darin
+       HELL sein: lokale Token auf die Dunkel-Palette umstellen; solider Grund,
+       weil bs-contrast alle backdrop-filter deaktiviert (sonst milchig). */
+    @media (max-width: 860px) {
+      html.bs-contrast body[data-theme="light"] .sidebar {
+        background: rgba(11,26,46,.97) !important;
+        --txt: #f4f8ff; --muted: #c6d6f0; --faint: #9fb6d4;
+        --stroke: rgba(120,150,200,.55); --glass-stroke: rgba(120,150,200,.40);
+        --panel: rgba(17,38,64,1); --panel2: rgba(23,48,80,1);
+        color: var(--txt);
+      }
+    }
+    html.bs-contrast body[data-theme="light"].mode-expert-mobile .sidebar {
+      background: rgba(11,26,46,.97) !important;
+      --txt: #f4f8ff; --muted: #c6d6f0; --faint: #9fb6d4;
+      --stroke: rgba(120,150,200,.55); --glass-stroke: rgba(120,150,200,.40);
+      --panel: rgba(17,38,64,1); --panel2: rgba(23,48,80,1);
+      color: var(--txt);
+    }
   </style>
   <script>
     // BS-eco40 (31.08.2026): Der Aqua-Glass/Original-Umschalter wurde entfernt —
@@ -2054,13 +2099,13 @@
 
   <!-- ============ LANDING / START PAGE ============ -->
   <div id="landing">
-    <div class="land-ver" id="landVer">ecoLog 4.0 · Basis: BS27F Build 21.07.2026</div>
+    <div class="land-ver" id="landVer">enviLog 4.0 · Basis: BS27F Build 21.07.2026</div>
     <div class="land-card">
       <div class="land-logo">
         <!-- ecoTech-Logo (Corporate Design: Petrol #19aebe, Dunkelgrau #3e3d40, Barlow;
              Textfarbe ueber --ecoInk themefaehig, s. Style ecoFonts im Head) -->
         <!-- BS-eco40 (31.08.): vertikale Anordnung — Pflanze mittig OBEN, Wortmarke
-             zentriert darunter (Nutzerwunsch: Logo mittig ueber dem ecoLog 4.0). -->
+             zentriert darunter (Nutzerwunsch: Logo mittig ueber dem enviLog 4.0). -->
         <svg class="gp-logo" viewBox="0 0 520 254" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ecoTech Monitoring">
           <text x="260" y="196" text-anchor="middle" font-family="Barlow, 'Segoe UI', Arial, sans-serif" font-size="66" letter-spacing="3.3"><tspan font-weight="500" fill="#19aebe">eco</tspan><tspan font-weight="700" fill="var(--ecoInk, #3e3d40)">Tech</tspan></text>
           <text x="254" y="236" text-anchor="middle" font-family="Barlow, 'Segoe UI', Arial, sans-serif" font-size="24" font-weight="500" letter-spacing="12" fill="var(--ecoInk, #3e3d40)">MONITORING</text>
@@ -2068,7 +2113,7 @@
         </svg>
       </div>
       <!-- BS-eco40: App-Name im Logo-Stil (eco petrol + Log ink, Barlow) statt Farbverlauf -->
-      <div class="land-brand"><b class="ecoteal">eco</b><b class="ecoink">Log</b>&nbsp;4.0</div>
+      <div class="land-brand"><b class="ecoteal">envi</b><b class="ecoink">Log</b>&nbsp;4.0</div>
       <p class="land-tag" data-i18n="land.tag">Web Bluetooth console for ecoTech data loggers &amp; sensors</p>
 
       <div class="land-langrow" id="landLangs"></div>
@@ -2098,7 +2143,7 @@
   <!-- ============ SIMPLE MODE VIEW ============ -->
   <div id="simpleView">
     <div class="sm-bar">
-      <span class="sm-brand"><span class="ecoplant" aria-hidden="true"></span><span class="brandcol"><span class="gpword"><b class="ecoteal">eco</b><b class="ecoink">Tech</b> Monitoring</span><span class="appname"><b class="ecoteal">eco</b><b class="ecoink">Log</b>&nbsp;4.0 <span class="tag" data-i18n="land.simple">Simple Mode</span></span></span></span>
+      <span class="sm-brand"><span class="ecoplant" aria-hidden="true"></span><span class="brandcol"><span class="gpword"><b class="ecoteal">eco</b><b class="ecoink">Tech</b> Monitoring</span><span class="appname"><b class="ecoteal">envi</b><b class="ecoink">Log</b>&nbsp;4.0 <span class="tag" data-i18n="land.simple">Simple Mode</span></span></span></span>
       <div class="spacer"></div>
       <span class="badge" id="smAuthState" style="display:none"></span>
       <button class="connectbtn" id="smConnectBtn" type="button" style="width:auto; padding:10px 18px"><i class="bi-bluetooth"></i><span id="smConnectLbl" data-i18n="nav.connect">Connect</span></button>
@@ -2259,7 +2304,7 @@
   <div id="mobileView">
     <!-- Sticky top bar -->
     <div class="mv-top">
-      <span class="mv-brand"><span class="ecoplant" aria-hidden="true"></span><span class="brandcol"><span class="gpword"><b class="ecoteal">eco</b><b class="ecoink">Tech</b> Monitoring</span><span class="appname"><b class="ecoteal">eco</b><b class="ecoink">Log</b>&nbsp;4.0 <span class="modetag" data-i18n="land.smartphone">Smartphone version</span></span></span></span>
+      <span class="mv-brand"><span class="ecoplant" aria-hidden="true"></span><span class="brandcol"><span class="gpword"><b class="ecoteal">eco</b><b class="ecoink">Tech</b> Monitoring</span><span class="appname"><b class="ecoteal">envi</b><b class="ecoink">Log</b>&nbsp;4.0 <span class="modetag" data-i18n="land.smartphone">Smartphone version</span></span></span></span>
       <div class="spacer"></div>
       <button class="connectbtn" id="mvConnectBtn" type="button"><i class="bi-bluetooth"></i><span id="mvConnectLbl" data-i18n="nav.connect">Connect</span></button>
       <button class="mv-icbtn" id="mvLangBtn" type="button" title="Language" aria-label="Language" aria-haspopup="true" aria-expanded="false"><i class="bi-translate"></i><span id="mvLangLbl">EN</span></button>
@@ -2437,7 +2482,7 @@
         <!-- Kein Modus-Chip mehr im Expert-Kopf (Nutzerwunsch 31.08.: Leiste so
              schlicht wie in der Smartphone-Ansicht). App-Name im Logo-Stil:
              eco petrol (Barlow 500) + Log dunkel (Barlow 700), kein Farbverlauf. -->
-        <span class="bname"><span class="ecoplant" aria-hidden="true"></span><span class="brandcol"><span id="gpWord" class="gpword"><b class="ecoteal">eco</b><b class="ecoink">Tech</b> Monitoring</span><span class="appname"><b class="ecoteal">eco</b><b class="ecoink">Log</b>&nbsp;4.0</span></span></span>
+        <span class="bname"><span class="ecoplant" aria-hidden="true"></span><span class="brandcol"><span id="gpWord" class="gpword"><b class="ecoteal">eco</b><b class="ecoink">Tech</b> Monitoring</span><span class="appname"><b class="ecoteal">envi</b><b class="ecoink">Log</b>&nbsp;4.0</span></span></span>
       </div>
       <div class="spacer"></div>
       <!-- Compact Connect button: visible only in Expert-smartphone mode so the user can
@@ -8305,7 +8350,7 @@ z-</textarea>
 
       switch (c0) {
         case '.?': case '.help':
-          say('ecoLog 4.0 · Basis BS27F · SysCommands:');
+          say('enviLog 4.0 · Basis BS27F · SysCommands:');
           say('.? Hilfe · .cls leeren · .q zum Dashboard · .rs 0|1 RSSI-Zeilen · .k 0|1 Verbindung halten');
           say('.bfast/.bslow BLE-Tempo · .sl MS warten · .c [PIN] verbinden · .d trennen · .i identifizieren');
           say('.m Speicher (v) · .t [set] Uhr lesen/stellen · .u Daten laden · .p Datei zum Geraet');
@@ -8438,7 +8483,7 @@ z-</textarea>
         case '.a': case '.audio': case '.f': case '.cf': case '.connectionfast':
         case '.l': case '.lines': case '.x': case '.xtract': case '.memput': case '.fput':
         case '.crun': case '.expect': case '.shell': case '.devicelist':
-          err(c0 + ' ist in ecoLog 4.0 nicht portiert. Alternativen: Daten/Grafik ueber "Speicher & Daten", Dateien ueber das Directory, Firmware ueber .firmware.');
+          err(c0 + ' ist in enviLog 4.0 nicht portiert. Alternativen: Daten/Grafik ueber "Speicher & Daten", Dateien ueber das Directory, Firmware ueber .firmware.');
           return;
         default:
           err('Unbekannter SysCommand: ' + c0 + '  (.? zeigt die Liste)');
@@ -12676,7 +12721,7 @@ z-</textarea>
             const fresh = Math.abs(Date.now() - d.getTime()) < 120000;   // ~now => no real header, keep fallback
             if (!isNaN(d.getTime()) && !fresh) {
               const p2 = (n) => ('0' + n).slice(-2);
-              el.textContent = 'ecoLog 4.0 · ' + p2(d.getDate()) + '.' + p2(d.getMonth() + 1) + '.' + d.getFullYear() + ' ' + p2(d.getHours()) + ':' + p2(d.getMinutes());
+              el.textContent = 'enviLog 4.0 · ' + p2(d.getDate()) + '.' + p2(d.getMonth() + 1) + '.' + d.getFullYear() + ' ' + p2(d.getHours()) + ':' + p2(d.getMinutes());
             }
           } catch (e) {}
         } }

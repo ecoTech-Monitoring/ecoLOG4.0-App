@@ -7070,20 +7070,33 @@ z-</textarea>
       S.plot = { padL, padT, w, h, f0, f1 };
       const zoomed = f0 > 1e-6 || f1 < 1 - 1e-6;
       setLabel(zoomed ? 'Logger data · zoomed' : 'Logger data');
-      // Y-axis value labels (first visible channel min / mid / max define the height)
+      // BS-eco40 (02.09.): Die Kurven sind JE KANAL auf die volle Hoehe normiert
+      // (nur so bleiben gemischte Einheiten wie hPa neben °C ablesbar). Absolute
+      // Achsenzahlen stimmen deshalb nur bei EINEM sichtbaren Kanal — bei mehreren
+      // zeigte die Achse bisher irrefuehrend die Werte des ERSTEN Kanals
+      // (Tester-Befund). Jetzt: 1 Kanal = echte Werte; mehrere = 0/50/100 % mit
+      // Hinweis; exakte Werte liefert weiterhin der Klick auf einen Punkt.
       ctx.fillStyle = '#93a0c8'; ctx.font = '11px system-ui';
-      const yref = visible[0];
-      ctx.fillText(yref._vmax.toFixed(2), 3, padT + 9);
-      ctx.fillText(((yref._vmax + yref._vmin) / 2).toFixed(2), 3, padT + h / 2 + 4);
-      ctx.fillText(yref._vmin.toFixed(2), 3, padT + h);
+      if (visible.length === 1) {
+        const yref = visible[0];
+        ctx.fillText(yref._vmax.toFixed(2), 3, padT + 9);
+        ctx.fillText(((yref._vmax + yref._vmin) / 2).toFixed(2), 3, padT + h / 2 + 4);
+        ctx.fillText(yref._vmin.toFixed(2), 3, padT + h);
+      } else {
+        ctx.fillText('100 %', 3, padT + 9);
+        ctx.fillText('50 %', 3, padT + h / 2 + 4);
+        ctx.fillText('0 %', 3, padT + h);
+        const hint = t('gfx.perChan') || 'scaled per channel — tap a point for exact values';
+        ctx.fillText(hint, padL + w - ctx.measureText(hint).width - 4, padT + 12);
+      }
       // X-axis labels: time of the primary channel at the window edges + sample count
       const prim = visible[0]; const N = prim.pts.length;
       const idxAt = (f) => Math.max(0, Math.min(N - 1, Math.round(f * (N - 1))));
       const tA = prim.pts[idxAt(f0)], tB = prim.pts[idxAt(f1)];
       if (tA) ctx.fillText(tLabel(tA.t), padL, cv.height - 8);
       if (tB) { const e = tLabel(tB.t); ctx.fillText(e, padL + w - ctx.measureText(e).width, cv.height - 8); }
-      const cLbl = (idxAt(f1) - idxAt(f0) + 1) + ' / ' + N + ' values';
-      ctx.fillText(cLbl, padL + w / 2 - ctx.measureText(cLbl).width / 2, cv.height - 8);
+      // BS-eco40 (02.09.): Der mittige Zaehler "x / N values" ist entfernt —
+      // fuer die Tester ohne erkennbaren Nutzen (die Zeitspanne steht daneben).
       // clip to plot area so zoomed lines never overdraw axes
       ctx.save(); ctx.beginPath(); ctx.rect(padL, padT, w, h); ctx.clip();
       series.forEach((s, si) => {
@@ -10833,7 +10846,7 @@ z-</textarea>
         'meas.startRaw': 'Start raw scan', 'meas.stop': 'Stop',
         'gfx.h1': 'Graphics', 'gfx.sub': 'Downloaded logger data. Scroll / pinch to zoom, drag to pan, double-click to reset. Click a point to read its value.',
         'gfx.load': 'Load Data from Device', 'gfx.exportCsv': 'Export CSV', 'gfx.resetZoom': 'Reset zoom', 'gfx.clear': 'Clear',
-        'gfx.csvOnly': 'CSV export only', 'gfx.decimalComma': 'Decimal comma', 'gfx.compact': 'Compact', 'gfx.removeAlarms': 'Remove alarms', 'gfx.allOn': 'All on', 'gfx.allOff': 'All off', 'gfx.table': 'Table', 'gfx.tableTitle': 'Data preview', 'gfx.tableRows': 'rows shown', 'gfx.tableMore': 'full data via “Export CSV”',
+        'gfx.csvOnly': 'CSV export only', 'gfx.decimalComma': 'Decimal comma', 'gfx.compact': 'Compact', 'gfx.removeAlarms': 'Remove alarms', 'gfx.allOn': 'All on', 'gfx.allOff': 'All off', 'gfx.perChan': 'scaled per channel — tap a point for exact values', 'gfx.table': 'Table', 'gfx.tableTitle': 'Data preview', 'gfx.tableRows': 'rows shown', 'gfx.tableMore': 'full data via “Export CSV”',
         'gfx.stat': 'Connect, then “Load Data from Device”.', 'gfx.chanHint': 'Channels — click to show / hide:',
         'mem.h1': 'Memory & Data', 'mem.sub': 'Load the logged data here — after loading, the chart appears right below and “Table” / “Export CSV” become available.',
         'mem.storage': 'Storage', 'mem.memory': 'Memory', 'mem.timeDelta': 'Time delta', 'mem.readInfo': 'Read info',
@@ -11120,7 +11133,7 @@ z-</textarea>
         'meas.startRaw': 'Rohscan starten', 'meas.stop': 'Stopp',
         'gfx.h1': 'Diagramme', 'gfx.sub': 'Heruntergeladene Logger-Daten. Scrollen / Zwei-Finger-Zoom zum Zoomen, ziehen zum Verschieben, Doppelklick zum Zurücksetzen. Klicken Sie auf einen Punkt, um seinen Wert zu lesen.',
         'gfx.load': 'Daten vom Gerät laden', 'gfx.exportCsv': 'CSV exportieren', 'gfx.resetZoom': 'Zoom zurücksetzen', 'gfx.clear': 'Leeren',
-        'gfx.csvOnly': 'Nur CSV-Export', 'gfx.decimalComma': 'Dezimalkomma', 'gfx.compact': 'Kompakt', 'gfx.removeAlarms': 'Alarme entfernen', 'gfx.allOn': 'Alle an', 'gfx.allOff': 'Alle aus', 'gfx.table': 'Tabelle', 'gfx.tableTitle': 'Datenvorschau', 'gfx.tableRows': 'Zeilen angezeigt', 'gfx.tableMore': 'vollständige Daten über „CSV exportieren“',
+        'gfx.csvOnly': 'Nur CSV-Export', 'gfx.decimalComma': 'Dezimalkomma', 'gfx.compact': 'Kompakt', 'gfx.removeAlarms': 'Alarme entfernen', 'gfx.allOn': 'Alle an', 'gfx.allOff': 'Alle aus', 'gfx.perChan': 'je Kanal skaliert — Punkt antippen für exakte Werte', 'gfx.table': 'Tabelle', 'gfx.tableTitle': 'Datenvorschau', 'gfx.tableRows': 'Zeilen angezeigt', 'gfx.tableMore': 'vollständige Daten über „CSV exportieren“',
         'gfx.stat': 'Verbinden, dann „Daten vom Gerät laden“.', 'gfx.chanHint': 'Kanäle — zum Ein- / Ausblenden klicken:',
         'mem.h1': 'Speicher & Daten', 'mem.sub': 'Hier die aufgezeichneten Daten laden — nach dem Laden erscheint direkt darunter die Grafik, dazu „Tabelle“ und „CSV exportieren“.',
         'mem.storage': 'Speicher', 'mem.memory': 'Speicher', 'mem.timeDelta': 'Zeitdifferenz', 'mem.readInfo': 'Info lesen',

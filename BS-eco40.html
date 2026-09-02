@@ -2958,6 +2958,9 @@
             <div class="btn-row" style="margin-top:14px; align-items:center">
               <button class="btn primary" id="smartScan" disabled data-i18n-title="tip.smartScan"><i class="bi-search-heart"></i><span data-i18n="smart.scan">Find my sensors</span></button>
               <label class="ck" style="margin:0" title="0-9 + a-z + A-Z (62 Adressen, dauert ca. 1 Minute)"><input type="checkbox" id="smartScanAll"><span data-i18n="smart.scanAll">All addresses (0-9, a-z, A-Z)</span></label>
+              <!-- BS-eco40: Slots mit -101 (Leerplaetze, z. B. Funkadapter-Slot-Bank)
+                   werden beim Uebernehmen standardmaessig uebersprungen. -->
+              <label class="ck" style="margin:0"><input type="checkbox" id="smartOnlyUsed" checked><span data-i18n="smart.onlyUsed">Only transfer used values (skip −101)</span></label>
               <span class="muted small mono" id="smartProgress" style="align-self:center"></span>
             </div>
           </div>
@@ -5376,22 +5379,33 @@ z-</textarea>
     // (0 = base aM!, 1 = aM1!, …) gets: a TRIGGER channel (SrcIndex 0, NO cache, Extra
     // "*1800 <addr>M<g>") followed by CACHED channels (SrcIndex 1,2,…, empty Extra).
     // PhysChan is always 768. `prevCh` seeds inherited fields (offset/factor/etc.).
-    function buildSdiChannels(addr, groups, prevCh) {
+    function buildSdiChannels(addr, groups, prevCh, onlyUsed) {
       const out = []; let prev = prevCh || null;
       groups.forEach((gr, g) => {
         const cnt = gr.values ? gr.values.length : (gr.n || 0);
         const suffix = (g === 0) ? '' : ('' + g);             // M, M1, M2…
         const units = gr.units || [];
+        // BS-eco40 (02.09.): onlyUsed=true legt nur BELEGTE Werte an — Slots mit
+        // -101 sind Leerplaetze (z. B. feste 9er-Slot-Bank des Funkadapters);
+        // ohne Filter musste der Tester die ueberfluessigen Kanalzeilen jedes
+        // Mal von Hand loeschen. Der ERSTE belegte Wert wird der Trigger-Kanal
+        // (traegt das "*1800 <addr>M<g>"); die uebrigen belegten werden Cache-
+        // Zeilen mit ihrem ECHTEN Wert-Index. Komplett leere Gruppen entfallen.
+        const idx = [];
         for (let j = 0; j < cnt; j++) {
+          if (onlyUsed && gr.values && String(gr.values[j]).trim() === '-101') continue;
+          idx.push(j);
+        }
+        idx.forEach((j, k) => {
           const ch = newChannel(prev);
-          ch[0] = (j === 0) ? '1' : '3';                      // group's first value triggers (Meas); rest cached (Meas+Cache)
+          ch[0] = (k === 0) ? '1' : '3';                      // first KEPT value triggers (Meas); rest cached (Meas+Cache)
           ch[1] = '768';                                      // PhysChan (constant SDI-12 bus/type code)
-          ch[3] = '' + j;                                     // SrcIndex restarts at 0 per M-group
+          ch[3] = '' + j;                                     // SrcIndex = echter Wert-Index im Messpuffer
           ch[4] = units[j] || '';                             // Unit (if known)
           ch[5] = '2';                                        // MemFormat = 2 decimals
-          ch[12] = (j === 0) ? ('*1800 ' + addr + 'M' + suffix) : '';   // trigger "*1800 <addr>M<g>"; cached = empty
+          ch[12] = (k === 0) ? ('*1800 ' + addr + 'M' + suffix) : '';   // trigger "*1800 <addr>M<g>"; cached = empty
           out.push(ch); prev = ch;
-        }
+        });
       });
       return out;
     }
@@ -9239,7 +9253,14 @@ z-</textarea>
       // group's first value is the non-cached trigger with Extra "*1800 <addr>M<g>". Uses
       // s.groups (from "Read all values") if present, else a single base group.
       const groups = (s.groups && s.groups.length) ? s.groups : [{ values: s.values, units: s.units }];
-      const built = buildSdiChannels(addr, groups, P.ip.chans.length ? P.ip.chans[P.ip.chans.length - 1] : null);
+      // BS-eco40 (02.09.): Standard = nur belegte Werte uebernehmen (Slots mit
+      // -101 ueberspringen); abschaltbar ueber den Haken neben dem Scan-Knopf.
+      const onlyCb = $('smartOnlyUsed');
+      const onlyUsed = onlyCb ? onlyCb.checked : true;
+      let skipped = 0;
+      if (onlyUsed) groups.forEach(gr => (gr.values || []).forEach(v => { if (String(v).trim() === '-101') skipped++; }));
+      const built = buildSdiChannels(addr, groups, P.ip.chans.length ? P.ip.chans[P.ip.chans.length - 1] : null, onlyUsed);
+      if (!built.length) { toast(t('smart.allEmptyAdd') || 'All values of this sensor are unused (-101) — nothing to transfer.', 'warn'); syncIpRaw(); renderIparam(); return; }
       let added = 0;
       for (const ch of built) {
         if (!isNaN(maxch) && P.ip.chans.length >= maxch) { toast('Max channels reached (' + maxch + ').', 'warn'); break; }
@@ -9250,6 +9271,7 @@ z-</textarea>
         try { renderLogParam(); renderChParam(); } catch (e) {}   // populate the friendly pages
         try { seedMeasChannelsFromIparam(); } catch (e) {}        // refresh "Measure now" channel list
         toast((t('smart.added') || 'Prepared {n} channel(s). Review on Kanal Parameter, then Save & apply.').replace('{n}', added), 'ok');
+        if (skipped > 0) toast((t('smart.skipped') || '{n} unused slot(s) (-101) skipped.').replace('{n}', skipped), 'ok');
         S.chParamIdx = P.ip.chans.length - 1;                      // jump to the newly added channel
         try { renderChParam(); } catch (e) {}
         showSec('chparam');                                        // page where iparam channels are visible + writable
@@ -10893,6 +10915,9 @@ z-</textarea>
         'tbl.up': 'Move up', 'tbl.down': 'Move down', 'tbl.jump': 'Open in the single view below', 'tbl.keepOne': 'At least one channel must remain.',
         'tbl.hint': 'Tip: click a row number to open that channel in the single view below (coefficient helper, measurement test).',
         'smart.slotsHidden': '{n} unused slots hidden (value -101)', 'smart.allEmpty': 'All slots unused (-101).',
+        'smart.onlyUsed': 'Only transfer used values (skip −101)',
+        'smart.skipped': '{n} unused slot(s) (-101) skipped.',
+        'smart.allEmptyAdd': 'All values of this sensor are unused (-101) — nothing to transfer.',
         'sdi.note': 'SDI-12 access uses the device\'s serial passthrough; behaviour depends on the logger firmware and wiring. The output window shows raw replies for verification.',
         'nav.radio': 'Radio adapter (Expert)',
         'radio.h1': 'Radio 433 MHz — value mapping',
@@ -11178,6 +11203,9 @@ z-</textarea>
         'tbl.up': 'Nach oben', 'tbl.down': 'Nach unten', 'tbl.jump': 'In der Einzelansicht darunter öffnen', 'tbl.keepOne': 'Mindestens ein Kanal muss bleiben.',
         'tbl.hint': 'Tipp: Klick auf eine Zeilennummer öffnet den Kanal in der Einzelansicht darunter (Koeffizienten-Helfer, Mess-Test).',
         'smart.slotsHidden': '{n} unbelegte Plätze ausgeblendet (Wert -101)', 'smart.allEmpty': 'Alle Plätze unbelegt (-101).',
+        'smart.onlyUsed': 'Nur belegte Werte übernehmen (−101 überspringen)',
+        'smart.skipped': '{n} unbelegte Plätze (−101) übersprungen.',
+        'smart.allEmptyAdd': 'Alle Werte dieses Sensors sind unbelegt (−101) — nichts zu übertragen.',
         'sdi.note': 'Der SDI-12-Zugriff nutzt die serielle Durchleitung des Geräts; das Verhalten hängt von Firmware und Verkabelung des Loggers ab. Das Ausgabefenster zeigt die Rohantworten zur Kontrolle.',
         'nav.radio': 'Funkadapter Expert',
         'radio.h1': 'Funk 433 MHz — Wertezuordnung',
@@ -12847,6 +12875,9 @@ z-</textarea>
       { const b = $('sdiExit'); if (b) b.onclick = () => guard(exitPassthrough); }
       { const b = $('sdiScan'); if (b) b.onclick = () => guard(sdiScan); }
       { const b = $('smartScan'); if (b) b.onclick = () => guard(smartScan); }
+      // BS-eco40: "Nur belegte Werte uebernehmen" — Standard AN, Wahl gemerkt.
+      { const cb = $('smartOnlyUsed'); if (cb) { cb.checked = lsGet('bsh_smart_used', '1') === '1';
+          cb.onchange = () => lsSet('bsh_smart_used', cb.checked ? '1' : '0'); } }
       { const b = $('smartBusRun'); if (b) b.onclick = smartBusRunConfig; }
       { const b = $('smartBusClear'); if (b) b.onclick = () => { const e = $('smartBusOut'); if (e) e.innerHTML = ''; }; }
       { const b = $('sdiAddChan'); if (b) b.onclick = () => guard(sdiAddChannels); }

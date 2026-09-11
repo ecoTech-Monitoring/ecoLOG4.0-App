@@ -2048,6 +2048,41 @@
       color: #ffffff !important;
     }
 
+    /* BS-eco40 (11.09.): Schaltflaechen im HELLEN Modus deutlich vom Grund
+       abheben — die Glass-Tokens machten Sekundaer-Knoepfe, Icon-Knoepfe und
+       Badges fast weiss auf weissen Karten ("Ton in Ton", Tester-Screenshot).
+       Getoente Flaeche + satter Rand + dunkle Schrift; der Petrol-Primaerknopf,
+       der rote Trennen-Zustand und .btn.on (Factory) bleiben unveraendert. */
+    html.bs-contrast body[data-theme="light"] .btn:not(.primary):not(.on),
+    html.bs-contrast body[data-theme="light"] .iconbtn,
+    html.bs-contrast body[data-theme="light"] .mv-icbtn,
+    html.bs-contrast body[data-theme="light"] .mc-btn:not(.primary),
+    html.bs-contrast body[data-theme="light"] .rowno,
+    html.bs-contrast body[data-theme="light"] .chtbl td.acts button {
+      background: #d3e6ea !important;
+      border-color: rgba(13,90,102,.55) !important;
+      color: #10333b !important;
+    }
+    html.bs-contrast body[data-theme="light"] .btn:not(.primary):not(.on):hover:not(:disabled),
+    html.bs-contrast body[data-theme="light"] .iconbtn:hover,
+    html.bs-contrast body[data-theme="light"] .mv-icbtn:hover {
+      background: #c1dbe1 !important;
+      border-color: #0d7e8c !important;
+    }
+    html.bs-contrast body[data-theme="light"] .btn.ghost:not(.on) { background: #e2eef1 !important; }
+    html.bs-contrast body[data-theme="light"] .badge {
+      background: #d9eaee !important;
+      border-color: rgba(13,90,102,.42) !important;
+      color: #2c5560 !important;
+    }
+    /* Inaktiv bleibt klar als inaktiv erkennbar (blasser statt Ton in Ton). */
+    html.bs-contrast body[data-theme="light"] .btn:disabled,
+    html.bs-contrast body[data-theme="light"] .sm-bigbtn:disabled,
+    html.bs-contrast body[data-theme="light"] .mv-bigbtn:disabled,
+    html.bs-contrast body[data-theme="light"] .connectbtn:disabled {
+      opacity: .48;
+    }
+
     /* BS-eco40 (02.09.): VERBUNDEN = Trennen-Knopf in sattem Rot. Die Basis
        nutzte 12 % Hellrot mit rotem Text — als Trennen-Aktion kaum erkennbar. */
     html.bs-contrast .connectbtn.conn,

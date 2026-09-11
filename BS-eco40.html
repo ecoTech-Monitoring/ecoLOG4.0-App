@@ -2086,6 +2086,25 @@
       border-color: #0d7e8c !important;
     }
     html.bs-contrast body[data-theme="light"] .btn.ghost:not(.on) { background: #e2eef1 !important; }
+    /* BS-eco40 (11.09., Runde 3): Die kleinen KOPFZEILEN-Knoepfe (Sprache,
+       Hell/Dunkel, Home, A-/A+) sitzen auf dem GETOENTEN Grund — dort ist
+       WEISS der richtige Fuellton (wie die Kacheln), nicht die Toenung.
+       Steht NACH der Toenungs-Regel und gewinnt daher fuer die Kopfzeilen. */
+    html.bs-contrast body[data-theme="light"] header .iconbtn,
+    html.bs-contrast body[data-theme="light"] header .fontseg button,
+    html.bs-contrast body[data-theme="light"] .sm-bar .iconbtn,
+    html.bs-contrast body[data-theme="light"] .sm-bar .fontseg button,
+    html.bs-contrast body[data-theme="light"] .mv-top .mv-icbtn {
+      background: #ffffff !important;
+      border-color: rgba(13,126,140,.42) !important;
+      color: #10333b !important;
+    }
+    html.bs-contrast body[data-theme="light"] header .iconbtn:hover,
+    html.bs-contrast body[data-theme="light"] .sm-bar .iconbtn:hover,
+    html.bs-contrast body[data-theme="light"] .mv-top .mv-icbtn:hover {
+      background: #e8f3f5 !important;
+      border-color: #0d7e8c !important;
+    }
     html.bs-contrast body[data-theme="light"] .badge {
       background: #d9eaee !important;
       border-color: rgba(13,90,102,.42) !important;

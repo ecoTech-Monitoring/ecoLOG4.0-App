@@ -2048,6 +2048,22 @@
       color: #ffffff !important;
     }
 
+    /* BS-eco40 (11.09.): Kacheln im HELLEN Modus wie auf der Startseite —
+       SOLID WEISS auf dem getoenten Petrol-Grund (Nutzerwunsch). Die Basis
+       nutzt 4-11 % transparente Weiss-Verlaeufe, durch die der Hintergrund
+       schimmerte (Pastell-Einerlei). Konsolen-/Well-Flaechen bleiben getoent. */
+    html.bs-contrast body[data-theme="light"] .card,
+    html.bs-contrast body[data-theme="light"] .sm-card,
+    html.bs-contrast body[data-theme="light"] .sm-stat,
+    html.bs-contrast body[data-theme="light"] .mv-card,
+    html.bs-contrast body[data-theme="light"] .mv-hero,
+    html.bs-contrast body[data-theme="light"] .mv-tile,
+    html.bs-contrast body[data-theme="light"] .smart-card {
+      background: #ffffff !important;
+      border-color: rgba(13,126,140,.28) !important;
+      box-shadow: 0 10px 26px rgba(10,60,70,.10) !important;
+    }
+
     /* BS-eco40 (11.09.): Schaltflaechen im HELLEN Modus deutlich vom Grund
        abheben — die Glass-Tokens machten Sekundaer-Knoepfe, Icon-Knoepfe und
        Badges fast weiss auf weissen Karten ("Ton in Ton", Tester-Screenshot).
